@@ -4,9 +4,9 @@ import Image from "next/image"
 async function getHomepageSettings() {
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : process.env.NEXT_PUBLIC_BASE_URL
-      ? process.env.NEXT_PUBLIC_BASE_URL
-      : "";
+    : process.env.NEXT_PUBLIC_SITE_URL
+      ? process.env.NEXT_PUBLIC_SITE_URL
+      : "https://your-site-name.netlify.app"; // Replace with your actual Netlify site URL
   const res = await fetch(`${baseUrl}/api/admin/homepage-settings`, { cache: 'no-store' })
   if (!res.ok) return null
   return res.json()

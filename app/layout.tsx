@@ -31,9 +31,9 @@ export default async function RootLayout({
   try {
     const baseUrl = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXT_PUBLIC_BASE_URL
-        ? process.env.NEXT_PUBLIC_BASE_URL
-        : "http://localhost:3000";
+      : process.env.NEXT_PUBLIC_SITE_URL
+        ? process.env.NEXT_PUBLIC_SITE_URL
+        : "https://your-site-name.netlify.app"; // Replace with your actual Netlify site URL
     const res = await fetch(`${baseUrl}/api/admin/homepage-settings`, { cache: 'no-store' });
     if (res.ok) homepageSettings = await res.json();
   } catch {}
