@@ -12,9 +12,12 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Company Name",
+  title: "TIMBEX",
   description: "Your company description",
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  icons: {
+    icon: '/uploads/timbex.ico', // Icon from uploads folder
+  },
 }
 
 export const dynamic = "force-dynamic";
