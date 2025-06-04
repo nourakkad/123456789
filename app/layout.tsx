@@ -16,7 +16,9 @@ export const metadata: Metadata = {
   description: "Your company description",
   generator: 'v0.dev',
   icons: {
-    icon: '/uploads/timbex.ico', // Icon from uploads folder
+    icon: '/timbex.ico',
+    shortcut: '/timbex.ico',
+    
   },
 }
 
