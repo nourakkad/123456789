@@ -32,7 +32,7 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
           <div className="flex-1 flex justify-center">
             <Image
               alt="Company Hero"
-              className="rounded-2xl object-cover shadow-lg w-full max-w-xs md:max-w-md h-48 md:h-64"
+              className="rounded-full shadow-lg w-full max-w-xs md:max-w-md aspect-square object-cover"
               height={400}
               width={400}
               src="/uploads/tembix-logo.png"
