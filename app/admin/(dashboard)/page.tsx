@@ -159,11 +159,11 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 force-light-mode">
       <h1 className="text-3xl font-bold text-primary">Admin Dashboard</h1>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="bg-white border border-primary text-black">
+        <Card className="bg-white border border-primary text-black !bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-primary">Total Products</CardTitle>
             <Package className="h-4 w-4 text-primary" />
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border border-primary text-black">
+        <Card className="bg-white border border-primary text-black !bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-primary">Categories</CardTitle>
             <BarChart className="h-4 w-4 text-primary" />
@@ -184,7 +184,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border border-primary text-black">
+        <Card className="bg-white border border-primary text-black !bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-primary">Gallery Images</CardTitle>
             <ShoppingCart className="h-4 w-4 text-primary" />
@@ -194,7 +194,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border border-primary text-black">
+        <Card className="bg-white border border-primary text-black !bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-primary">Messages</CardTitle>
             <Users className="h-4 w-4 text-primary" />
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="bg-white border border-primary text-black">
+        <Card className="bg-white border border-primary text-black !bg-white">
           <CardHeader>
             <CardTitle className="text-primary">Recent Products</CardTitle>
             <CardDescription className="text-primary">Recently added products</CardDescription>
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border border-primary text-black">
+        <Card className="bg-white border border-primary text-black !bg-white">
           <CardHeader>
             <CardTitle className="text-primary">Recent Messages</CardTitle>
             <CardDescription className="text-primary">Latest contact form submissions</CardDescription>
