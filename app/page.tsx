@@ -6,7 +6,7 @@ async function getHomepageSettings() {
     ? `https://${process.env.VERCEL_URL}`
     : process.env.NEXT_PUBLIC_BASE_URL
       ? process.env.NEXT_PUBLIC_BASE_URL
-      : "http://localhost:3000";
+      : "";
   const res = await fetch(`${baseUrl}/api/admin/homepage-settings`, { cache: 'no-store' })
   if (!res.ok) return null
   return res.json()
