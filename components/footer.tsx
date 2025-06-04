@@ -132,8 +132,20 @@ export default function Footer({ siteName, address, contactEmail, contactPhone, 
           </div>
         </div>
         <div className="mt-8 border-t pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} {siteName.en}. All rights reserved.</p>
-        </div>
+  <p>&copy; {new Date().getFullYear()} {siteName.en}. All rights reserved.</p>
+  <p className="mt-2 text-white">
+    Powered by{" "}
+    <a
+      href="https://www.elyptek.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-orange-500 underline hover:text-orange-400"
+    >
+      Elyptek®
+    </a>
+  </p>
+</div>
+
       </div>
     </footer>
   )
