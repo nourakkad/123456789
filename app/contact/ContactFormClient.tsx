@@ -15,8 +15,6 @@ export default function ContactFormClient({ settings }: { settings: any }) {
   const searchParams = useSearchParams()
   const lang = searchParams.get("lang") === "ar" ? "ar" : "en"
 
-  console.log("showSuccessModal (render):", showSuccessModal)
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
@@ -33,10 +31,8 @@ export default function ContactFormClient({ settings }: { settings: any }) {
         body: JSON.stringify({ name, email, message }),
       })
       const data = await res.json()
-      console.log("API response:", data)
       if (!res.ok || !data.success) throw new Error(data.error || "Failed to send")
       setShowSuccessModal(true)
-      console.log("showSuccessModal set to true")
     } catch (error) {
       console.error(error)
     } finally {
@@ -46,12 +42,19 @@ export default function ContactFormClient({ settings }: { settings: any }) {
 
   return (
     <>
-      <h1 className={`text-3xl font-bold mb-8 text-primary w-full ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
+      <h1 className={`text-3xl font-bold mb-8 text-primary w-full px-4 md:px-12 ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
         {lang === 'ar' ? 'اتصل بنا' : 'Contact Us'}
       </h1>
-      <div className={`grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12 w-full max-w-7xl mx-auto px-4 lg:px-8 ${lang === 'ar' ? 'dir-rtl' : 'dir-ltr'}`}>
-        <div className="w-full flex flex-col justify-center">
-          <form onSubmit={handleSubmit} className={`space-y-8 bg-white border border-primary rounded-xl shadow p-8 md:p-12 w-full ${lang === 'ar' ? 'dir-rtl text-right' : 'dir-ltr text-left'}`}>
+
+      {/* Main Grid Layout */}
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 w-full max-w-screen-xl mx-auto px-4 lg:px-8 ${lang === 'ar' ? 'dir-rtl' : 'dir-ltr'}`}>
+
+        {/* LEFT SIDE - FORM */}
+        <div className="w-full flex flex-col justify-start flex-1">
+          <form
+            onSubmit={handleSubmit}
+            className={`space-y-8 bg-white border border-primary rounded-xl shadow p-8 md:p-12 w-full ${lang === 'ar' ? 'dir-rtl text-right' : 'dir-ltr text-left'}`}
+          >
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium text-primary">
                 {lang === 'ar' ? 'الاسم' : 'Name'}
@@ -75,44 +78,66 @@ export default function ContactFormClient({ settings }: { settings: any }) {
             </Button>
           </form>
         </div>
-        <div className="space-y-6 w-full flex flex-col">
+
+        {/* RIGHT SIDE - INFO + MAP */}
+        <div className="space-y-6 w-full flex flex-col flex-1">
+
+          {/* Our Location Card */}
           <div className={`bg-white border border-primary rounded-xl shadow p-6 md:p-8 w-full ${lang === 'ar' ? 'dir-rtl text-right' : 'dir-ltr text-left'}`}>
             <h2 className="text-xl font-semibold mb-4 text-primary">{lang === 'ar' ? 'موقعنا' : 'Our Location'}</h2>
             <p className="text-black">
               {settings?.address?.[lang] || '123 Business Street, City, State 12345'}
             </p>
           </div>
-          <div className={`bg-white border border-primary rounded-xl shadow p-6 md:p-8 w-full ${lang === 'ar' ? 'dir-rtl text-right' : 'dir-ltr text-left'}`}>
-            <h2 className="text-xl font-semibold mb-4 text-primary">{lang === 'ar' ? 'معلومات التواصل' : 'Contact Information'}</h2>
-            <div className="text-black space-y-3">
-              <div>
-                <span className="font-semibold">{lang === 'ar' ? 'البريد الإلكتروني' : 'Email'}:</span>
-                <a
-                  href={`mailto:${settings?.contactEmail || 'info@company.com'}`}
-                  className="ml-2 font-mono underline break-all text-primary"
-                  dir="ltr"
-                  style={{ direction: 'ltr', textAlign: 'left', display: 'inline-block' }}
-                >
-                  {settings?.contactEmail || 'info@company.com'}
-                </a>
-              </div>
-              <div>
-                <span className={`font-semibold${lang === 'ar' ? ' text-right' : ''}`}>{lang === 'ar' ? 'الهاتف' : 'Phone'}:</span>
-                <a
-                  href={`tel:${settings?.contactPhone?.[lang] || '+1 (123) 456-7890'}`}
-                  className="ml-2 font-mono text-primary"
-                  dir="ltr"
-                  style={{ direction: 'ltr', textAlign: 'left', display: 'inline-block' }}
-                >
-                  {settings?.contactPhone?.[lang] || '+1 (123) 456-7890'}
-                </a>
-              </div>
-              <div>
-                <span className="font-semibold">{lang === 'ar' ? 'ساعات العمل' : 'Hours'}:</span>
-                <span className="ml-2">{lang === 'ar' ? 'السبت - الخميس، 9 صباحًا - 5 مساءً' : 'Saturday - Thursday, 9am - 5pm'}</span>
-              </div>
-            </div>
-          </div>
+
+          {/* Contact Info Card */}
+<div className={`bg-white border border-primary rounded-xl shadow p-6 md:p-8 w-full ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
+  <h2 className="text-xl font-semibold mb-4 text-primary">
+    {lang === 'ar' ? 'معلومات التواصل' : 'Contact Information'}
+  </h2>
+  <div className="text-black space-y-4">
+    
+    {/* Email */}
+    <div className={`flex items-start gap-2 ${lang === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+      <span className="font-semibold whitespace-nowrap">
+        {lang === 'ar' ? ':البريد الإلكتروني' : 'Email:'}
+      </span>
+      <a
+        href={`mailto:${settings?.contactEmail || 'info@company.com'}`}
+        className="font-mono underline break-all text-primary text-left"
+        dir="ltr"
+      >
+        {settings?.contactEmail || 'info@company.com'}
+      </a>
+    </div>
+
+    {/* Phone */}
+    <div className={`flex items-start gap-2 ${lang === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+      <span className="font-semibold whitespace-nowrap">
+        {lang === 'ar' ? ':الهاتف' : 'Phone:'}
+      </span>
+      <a
+        href={`tel:${settings?.contactPhone?.[lang] || '+1 (123) 456-7890'}`}
+        className="font-mono text-primary text-left"
+        dir="ltr"
+      >
+        {settings?.contactPhone?.[lang] || '+1 (123) 456-7890'}
+      </a>
+    </div>
+
+    {/* Hours */}
+    <div className={`flex items-start gap-2 ${lang === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+      <span className="font-semibold whitespace-nowrap">
+        {lang === 'ar' ? ':ساعات العمل' : 'Hours:'}
+      </span>
+      <span>
+        {lang === 'ar' ? 'السبت - الخميس، 9 صباحًا - 5 مساءً' : 'Saturday - Thursday, 9am - 5pm'}
+      </span>
+    </div>
+  </div>
+</div>
+
+          {/* Map Card */}
           <div className={`border border-primary rounded-lg overflow-hidden bg-white w-full h-64 relative ${lang === 'ar' ? 'dir-rtl text-right' : 'dir-ltr text-left'}`}>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3329.019282651505!2d36.312139!3d33.519806!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2zMzPCsDMxJzExLjMiTiAzNsKwMTgnNDMuNyJF!5e0!3m2!1sen!2s!4v1710000000000!5m2!1sen!2s"
@@ -124,8 +149,12 @@ export default function ContactFormClient({ settings }: { settings: any }) {
               className="w-full h-full rounded"
             ></iframe>
           </div>
+
+          <div className="mb-8" />
         </div>
       </div>
+
+      {/* Success Dialog */}
       <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
         <DialogContent className="text-center">
           <DialogHeader>
