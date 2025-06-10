@@ -8,7 +8,7 @@ export default function ReadMoreText({ text, maxLines = 3, lang = 'en' }: { text
   return (
     <div>
       <p
-        className={`text-gray-600 dark:text-gray-400 whitespace-pre-line ${!isExpanded ? `line-clamp-${maxLines}` : ""}`}
+        className={`text-black whitespace-pre-line ${!isExpanded ? `line-clamp-${maxLines}` : ""}`}
         style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: maxLines, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
       >
         {text}
