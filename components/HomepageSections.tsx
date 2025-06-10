@@ -22,7 +22,7 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
           <div className="flex-1 space-y-4">
 
             <h1 className="text-2xl md:text-5xl font-extrabold text-primary mb-2">{lang === "ar" ? "شركتنا" : "Our Company"}</h1>
-            <div className="block md:hidden">
+            <div className="block md:hidden text-black">
               <ReadMoreText text={homepageSettings?.ourCompany?.[lang] || "We provide high-quality products and services to meet all your needs. Explore our catalog and discover what makes us different."} maxLines={4} lang={lang as 'en' | 'ar'} />
             </div>
             <p className="hidden md:block text-black text-lg">
