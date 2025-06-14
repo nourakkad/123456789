@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Award, CheckCircle, Quote } from "lucide-react"
 import ReadMoreText from "@/components/ReadMoreText"
 import { motion } from "framer-motion"
+import { LightBulbIcon, FlagIcon, SparklesIcon } from "@heroicons/react/24/outline"
 
 interface HomepageSectionsProps {
   homepageSettings: any
@@ -18,10 +19,12 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
     <div className="overflow-x-hidden">
       <div className="container mx-auto px-4 md:px-8 py-6 md:py-12 space-y-8 md:space-y-16 overflow-x-hidden">
         {/* Our Company Card */}
-        <section className="flex flex-col md:flex-row items-center bg-gradient-to-br from-primary/10 to-white rounded-2xl shadow-lg p-4 md:p-8 gap-4 md:gap-8 animate-fade-in">
+        <section className="flex flex-col md:flex-row items-center bg-gradient-to-br from-primary/25 to-white rounded-2xl shadow-lg p-4 md:p-8 gap-4 md:gap-8 animate-fade-in">
           <div className="flex-1 space-y-4">
 
-            <h1 className="text-2xl md:text-5xl font-extrabold text-primary mb-2">{lang === "ar" ? "شركتنا" : "Our Company"}</h1>
+            <h1 className="text-2xl md:text-5xl font-extrabold text-primary mb-2 flex items-center justify-center gap-2">
+            <SparklesIcon className="h-10 w-10" /> {lang === "ar" ? "من نحن" : "Who We Are"} <SparklesIcon className="h-10 w-10" />
+            </h1>
             <div className="block md:hidden text-black">
               <ReadMoreText text={homepageSettings?.ourCompany?.[lang] || "We provide high-quality products and services to meet all your needs. Explore our catalog and discover what makes us different."} maxLines={4} lang={lang as 'en' | 'ar'} />
             </div>
@@ -69,13 +72,17 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
         </section>
 
         {/* Why Choose Us Section */}
-        <section>
-          <h2 className="text-3xl font-bold mb-6 text-primary">{lang === "ar" ? "لماذا تختار تيمبكس؟" : "Why Choose Timbex?"}</h2>
-          <ul className="space-y-4">
+        <section className="bg-gray-20 rounded-xl shadow-md p-8 mb-8 backdrop-blur-sm">
+          <h2 className="text-3xl font-bold mb-4 text-primary border-b-2 border-primary/20 pb-2 ">
+            {lang === "ar" ? "لماذا تختار تيمبكس؟" : "Why Choose Timbex?"}
+          </h2>
+          <ul className="space-y-6">
             {whyChooseUs.map((reason: string, idx: number) => (
-              <li key={idx} className="flex items-start gap-3 text-lg">
-                <CheckCircle className="text-primary mt-1" size={24} />
-                <span className="text-black">{reason}</span>
+              <li key={idx} className="flex items-start gap-4 text-lg">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
+                  <CheckCircle className="text-primary" size={28} />
+                </span>
+                <span className="text-black leading-relaxed">{reason}</span>
               </li>
             ))}
           </ul>
@@ -88,7 +95,7 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="bg-gradient-to-br from-primary/10 to-white rounded-2xl shadow-lg p-4 md:p-10 max-w-full md:max-w-2xl text-center"
+            className="bg-gradient-to-br from-primary/25 to-white rounded-2xl shadow-lg p-4 md:p-10 max-w-full md:max-w-2xl text-center"
           >
             <Quote className="h-10 w-10 mx-auto mb-4 text-primary" />
             <blockquote className="text-lg md:text-2xl italic font-light text-black mb-4">
@@ -107,7 +114,10 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
             transition={{ duration: 0.7 }}
             className="flex-1 bg-white border border-primary rounded-xl shadow p-4 md:p-8 text-center"
           >
-            <h3 className="text-2xl font-bold text-primary mb-2 text-center">{lang === "ar" ? "رؤيتنا" : "Our Vision"}</h3>
+           
+            <h3 className="text-3xl font-bold mb-8 text-center text-primary flex items-center justify-center gap-2">
+            <LightBulbIcon className="h-12 w-12 text-primary" /> {lang === "ar" ? "رؤيتنا" : "Our Vision"} <LightBulbIcon className="h-12 w-12 text-primary" />
+            </h3>
             <p className="text-black whitespace-pre-line text-center">{vision}</p>
           </motion.div>
           <motion.div
@@ -117,7 +127,12 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
             transition={{ duration: 0.7 }}
             className="flex-1 bg-white border border-primary rounded-xl shadow p-4 md:p-8 text-center"
           >
-            <h3 className="text-2xl font-bold text-primary mb-2 text-center">{lang === "ar" ? "مهماتنا" : "Our Mission"}</h3>
+            
+              
+            
+            <h3 className="text-3xl font-bold mb-8 text-center text-primary flex items-center justify-center gap-2">
+               <FlagIcon className="h-12 w-12 text-primary" /> {lang === "ar" ? "مهماتنا" : "Our Mission"} <FlagIcon className="h-12 w-12 text-primary" />
+            </h3>
             <p className="text-black whitespace-pre-line text-center">{mission}</p>
           </motion.div>
         </section>
@@ -125,7 +140,7 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
         {/* Accreditations & Partnerships Section - hidden on mobile, visible on md+ */}
         <section className="py-16 bg-gradient-to-br from-primary/10 to-white hidden md:block">
           <div className="container mx-auto px-4">
-            <div className="max-w-full md:max-w-4xl mx-auto bg-gradient-to-br from-primary/10 to-white rounded-lg shadow-lg p-4 md:p-8 animate-fade-in border border-primary">
+            <div className="max-w-full md:max-w-4xl mx-auto bg-gradient-to-br from-primary/25 to-white rounded-lg shadow-lg p-4 md:p-8 animate-fade-in border border-primary">
               <div className="flex flex-col items-center mb-8">
                 <Award className="h-10 w-10 text-primary mb-2" />
                 <h2 className="text-3xl  text-black text-center">{homepageSettings?.accreditations?.[lang] || "Accreditations & Partnerships"}</h2>

@@ -1,6 +1,7 @@
 "use client"
 import { usePathname, useSearchParams } from "next/navigation"
 import { Globe } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function LanguageSwitcher() {
   const pathname = usePathname();
@@ -21,15 +22,15 @@ export default function LanguageSwitcher() {
   }
 
   return (
-    <a
-      href={href}
-      aria-label="Switch language"
-      className="group flex items-center gap-2 px-3 py-2 rounded-full bg-white shadow hover:bg-black transition-colors border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
-    >
-      <Globe className="h-5 w-5 text-black group-hover:text-white transition-colors" />
-      <span className="hidden sm:inline text-black group-hover:text-white text-sm font-medium transition-colors">
-        {lang === "en" ? "العربية" : "English"}
-      </span>
-    </a>
+    <Button variant="ghost" size="icon" asChild>
+      <a
+        href={href}
+        aria-label="Switch language"
+        className="relative"
+      >
+        <Globe className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+        <span className="sr-only">{lang === "en" ? "العربية" : "English"}</span>
+      </a>
+    </Button>
   );
 } 

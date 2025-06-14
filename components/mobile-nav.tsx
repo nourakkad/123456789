@@ -36,8 +36,8 @@ export default function MobileNav({ categories = [], closeMenu }: MobileNavProps
   };
 
   return (
-    <div className="bg-gradient-to-br from-[#e8f5e9] to-[#a5d6a7] p-3 rounded-2xl min-h-[320px] flex items-center justify-center">
-      <div className="backdrop-blur-xl bg-white/80 border border-primary/20 rounded-2xl shadow-2xl p-6 flex flex-col gap-4 w-full max-w-xs">
+    <div className="bg-green-100/40 backdrop-blur-lg border border-green-200/50 rounded-2xl p-3 min-h-[320px] flex items-center justify-center">
+      <div className="w-full max-w-xs">
         <Link
           href={{ pathname: "/", query: lang === "ar" ? { lang } : undefined }}
           className={cn(
