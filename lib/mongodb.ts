@@ -92,29 +92,41 @@ export default clientPromise
 export async function getSettings() {
   const { db } = await connectToDatabase();
   const settings = await db.collection(collections.settings).findOne({});
-  if (!settings) {
-    // Return default settings if none exist
-    return {
-      siteName: { en: "Company Name", ar: "اسم الشركة" },
-      siteDescription: { en: "Your company description", ar: "وصف الشركة" },
-      contactEmail: "info@company.com",
-      contactPhone: { en: "+1 (123) 456-7890", ar: "" },
-      address: { en: "123 Business Street, City, State 12345", ar: "" },
-      enableNotifications: true,
-      enableRegistration: false,
-      maintenanceMode: false,
-      theme: "light",
-      itemsPerPage: "10",
-      currency: "USD",
-      timezone: "UTC",
-    };
+  if (settings) {
+    // Convert MongoDB _id to id and remove _id
+    const { _id, ...settingsData } = settings
+    // Ensure all fields are in the correct format
+    const result = {
+      ...settingsData,
+      siteName: typeof settingsData.siteName === 'object' ? settingsData.siteName : { en: settingsData.siteName, ar: '' },
+      siteDescription: typeof settingsData.siteDescription === 'object' ? settingsData.siteDescription : { en: settingsData.siteDescription, ar: '' },
+      contactEmail: settingsData.contactEmail || 'info@company.com',
+      contactPhone: typeof settingsData.contactPhone === 'object' ? settingsData.contactPhone : { en: settingsData.contactPhone || '', ar: '' },
+      address: typeof settingsData.address === 'object' ? settingsData.address : { en: settingsData.address || '', ar: '' },
+      ourStory: typeof settingsData.ourStory === 'object' ? settingsData.ourStory : { en: settingsData.ourStory || '', ar: '' },
+      logo: settingsData.logo || '',
+      id: _id.toString(),
+    }
+    console.log("Returning settings:", Object.keys(result))
+    return result
   }
-  // Convert _id to id and remove _id
-  const { _id, ...settingsData } = settings;
-  return {
-    ...settingsData,
-    id: _id?.toString(),
-    address: typeof settingsData.address === 'object' ? settingsData.address : { en: settingsData.address || '', ar: '' },
-    contactPhone: typeof settingsData.contactPhone === 'object' ? settingsData.contactPhone : { en: settingsData.contactPhone || '', ar: '' },
-  };
+
+  // Return default settings if none exist
+  const defaultSettings = {
+    siteName: { en: "Company Name", ar: "اسم الشركة" },
+    siteDescription: { en: "Your company description", ar: "وصف الشركة" },
+    contactEmail: "info@company.com",
+    contactPhone: { en: "+1 (123) 456-7890", ar: "" },
+    address: { en: "123 Business Street, City, State 12345", ar: "" },
+    enableNotifications: true,
+    enableRegistration: false,
+    maintenanceMode: false,
+    theme: "light",
+    itemsPerPage: "10",
+    currency: "USD",
+    timezone: "UTC",
+    ourStory: { en: "", ar: "" },
+    logo: "",
+  }
+  return defaultSettings;
 }

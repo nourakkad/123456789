@@ -1,9 +1,7 @@
-import { NextResponse } from "next/server"
-import { writeFile, mkdir } from "fs/promises"
-import { join } from "path"
-import { existsSync } from "fs"
+import { NextRequest, NextResponse } from "next/server"
+import { connectToDatabase, collections } from "@/lib/mongodb"
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
     const file = formData.get("file") as File
@@ -15,31 +13,29 @@ export async function POST(request: Request) {
       )
     }
 
+    // Convert file to base64
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
+    const base64 = buffer.toString('base64')
+    const mimeType = file.type
+    const dataUrl = `data:${mimeType};base64,${base64}`
 
-    // Create a unique filename
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`
-    const filename = `${uniqueSuffix}-${file.name}`
-    
-    // Ensure uploads directory exists
-    const uploadDir = join(process.cwd(), "public", "uploads")
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true })
-    }
-    
-    // Save to public/uploads directory
-    const filepath = join(uploadDir, filename)
-    await writeFile(filepath, buffer)
+    // Store in database
+    const { db } = await connectToDatabase()
+    const result = await db.collection(collections.settings).updateOne(
+      {},
+      { $set: { logo: dataUrl } },
+      { upsert: true }
+    )
 
     return NextResponse.json({ 
-      success: true,
-      filename: `/uploads/${filename}`
+      url: dataUrl,
+      success: true 
     })
   } catch (error) {
     console.error("Error uploading file:", error)
     return NextResponse.json(
-      { error: "Error uploading file" },
+      { error: "Failed to upload file" },
       { status: 500 }
     )
   }

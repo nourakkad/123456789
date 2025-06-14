@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
 import { Separator } from "@/components/ui/separator"
+import Image from "next/image"
 
 export default function AdminSettingsPage() {
   const { toast } = useToast()
@@ -30,6 +31,7 @@ export default function AdminSettingsPage() {
     itemsPerPage: "10",
     currency: "USD",
     timezone: "UTC",
+    logo: "",
   } as { [key: string]: any })
   type HomepageSettingsType = {
     [key: string]: any
@@ -133,6 +135,38 @@ export default function AdminSettingsPage() {
     })
   }
 
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('Upload failed')
+      }
+
+      const data = await response.json()
+      handleChange('logo', data.url)
+      toast({
+        title: "Logo uploaded",
+        description: "Your logo has been uploaded successfully.",
+      })
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload logo. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
@@ -212,6 +246,35 @@ export default function AdminSettingsPage() {
             <CardDescription>Basic information about your website</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Logo Upload */}
+            <div className="space-y-2">
+              <Label>Logo</Label>
+              <div className="flex items-center gap-4">
+                {settings.logo && (
+                  <div className="relative w-32 h-32">
+                    <Image
+                      src={settings.logo}
+                      alt="Company Logo"
+                      fill
+                      className="object-contain"
+                      unoptimized
+                    />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    className="cursor-pointer"
+                  />
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Recommended size: 200x200 pixels. Max file size: 2MB
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="siteName_en">Site Name (English)</Label>

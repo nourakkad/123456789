@@ -18,6 +18,8 @@ export async function GET() {
         ...settingsData,
         siteName: typeof settingsData.siteName === 'object' ? settingsData.siteName : { en: settingsData.siteName, ar: '' },
         siteDescription: typeof settingsData.siteDescription === 'object' ? settingsData.siteDescription : { en: settingsData.siteDescription, ar: '' },
+        contactPhone: typeof settingsData.contactPhone === 'object' ? settingsData.contactPhone : { en: settingsData.contactPhone || '', ar: '' },
+        address: typeof settingsData.address === 'object' ? settingsData.address : { en: settingsData.address || '', ar: '' },
         id: _id.toString(),
       }
       console.log("Returning settings:", Object.keys(result))
@@ -29,8 +31,8 @@ export async function GET() {
       siteName: { en: "Company Name", ar: "اسم الشركة" },
       siteDescription: { en: "Your company description", ar: "وصف الشركة" },
       contactEmail: "info@company.com",
-      contactPhone: "+1 (123) 456-7890",
-      address: "123 Business Street, City, State 12345",
+      contactPhone: { en: "+1 (123) 456-7890", ar: "" },
+      address: { en: "123 Business Street, City, State 12345", ar: "" },
       enableNotifications: true,
       enableRegistration: false,
       maintenanceMode: false,

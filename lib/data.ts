@@ -75,6 +75,8 @@ export interface Settings {
   currency: string
   timezone: string
   updatedAt: string
+  logo?: string
+  ourStory?: { en: string; ar: string }
 }
 
 // Helper function to convert MongoDB _id to string id
@@ -316,5 +318,44 @@ export async function getStats() {
   } catch (error) {
     console.error("Error fetching stats:", error)
     return { products: 0, categories: 0, messages: 0, users: 0 }
+  }
+}
+
+export async function getHomepageSettings(): Promise<any> {
+  try {
+    const { db } = await connectToDatabase()
+    const doc = await db.collection('homepage_settings').findOne({})
+    if (!doc) {
+      return {
+        ourCompany: { en: "", ar: "" },
+        ourVision: { en: "", ar: "" },
+        ourValues: [
+          { title: { en: "", ar: "" }, description: { en: "", ar: "" } },
+        ],
+        whyChooseUs: { en: "", ar: "" },
+        foundersQuote: { en: "", ar: "" },
+        ourMissions: { en: "", ar: "" },
+        ourStory: { en: "", ar: "" },
+        accreditations: { en: "", ar: "" },
+        buildSomething: { en: "", ar: "" },
+      }
+    }
+    const { _id, ...rest } = doc
+    return rest
+  } catch (error) {
+    console.error("Error fetching homepage settings:", error)
+    return {
+      ourCompany: { en: "", ar: "" },
+      ourVision: { en: "", ar: "" },
+      ourValues: [
+        { title: { en: "", ar: "" }, description: { en: "", ar: "" } },
+      ],
+      whyChooseUs: { en: "", ar: "" },
+      foundersQuote: { en: "", ar: "" },
+      ourMissions: { en: "", ar: "" },
+      ourStory: { en: "", ar: "" },
+      accreditations: { en: "", ar: "" },
+      buildSomething: { en: "", ar: "" },
+    }
   }
 }
