@@ -80,7 +80,7 @@ export default function Header({ siteName, siteDescription, categories, logo }: 
           {logo ? (
             <div className="relative w-32 h-12">
               <Image
-                src={logo}
+                src="/uploads/tembix-logo.png"
                 alt={siteName.en}
                 fill
                 className="object-contain"
