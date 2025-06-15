@@ -38,7 +38,7 @@ export default function HomepageSections({ homepageSettings, lang, values, whyCh
               className="rounded-full shadow-lg w-full max-w-xs md:max-w-md aspect-square object-cover"
               height={400}
               width={400}
-              src="/uploads/tembix-logo.png"
+              src="/uploads/gardian.jpg"
             />
           </div>
         </section>
