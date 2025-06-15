@@ -1,7 +1,8 @@
 import ContactFormClient from "./ContactFormClient";
-import { getSettings } from "@/lib/mongodb";
+import { getSettings, getHomepageSettings } from "@/lib/data";
 
 export default async function ContactPage() {
   const settings = await getSettings();
-  return <ContactFormClient settings={settings} />;
+  const homepageSettings = await getHomepageSettings();
+  return <ContactFormClient settings={settings} homepageSettings={homepageSettings} />;
 }

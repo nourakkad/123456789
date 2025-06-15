@@ -9,6 +9,7 @@ export interface Product {
   slug: string
   description: { en: string; ar: string }
   image?: string
+  thumbUrl?: string
   category: { en: string; ar: string }
   categorySlug: string
   subcategory?: { en: string; ar: string }
@@ -36,6 +37,7 @@ export interface GalleryImage {
   description: string
   url?: string
   createdAt: string
+  category?: string
 }
 
 export interface Message {

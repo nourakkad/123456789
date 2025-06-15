@@ -66,6 +66,7 @@ const GalleryImageSchema = z.object({
   title: z.object({ en: z.string().min(2), ar: z.string().min(2) }),
   description: z.object({ en: z.string().min(5), ar: z.string().min(5) }),
   url: z.string().min(2),
+  thumbUrl: z.string().optional(),
 });
 
 // Admin authentication
@@ -462,9 +463,11 @@ export async function createGalleryImage(formData: FormData) {
     const title_ar = formData.get("title_ar")?.toString() || "";
     const description_en = formData.get("description_en")?.toString() || "";
     const description_ar = formData.get("description_ar")?.toString() || "";
+    const category = formData.get("category")?.toString() || "";
     const title = { en: title_en, ar: title_ar };
     const description = { en: description_en, ar: description_ar };
     const url = (formData.get("url") as string) || "/placeholder.svg?height=600&width=600&text=" + encodeURIComponent(title.en)
+    const thumbUrl = (formData.get("thumbUrl") as string) || null;
     // Validate gallery image
     const parsed = GalleryImageSchema.safeParse({ title, description, url });
     if (!parsed.success) {
@@ -474,7 +477,9 @@ export async function createGalleryImage(formData: FormData) {
       title,
       description,
       url,
+      thumbUrl,
       createdAt: new Date().toISOString(),
+      category,
     }
     const result = await db.collection(collections.gallery).insertOne(image)
     revalidatePath("/admin/gallery")
