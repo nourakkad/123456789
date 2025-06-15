@@ -40,7 +40,9 @@ export default function Header({ siteName, siteDescription, categories, logo }: 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      if (currentScrollY > lastScrollY) {
+      if (currentScrollY === 0) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY) {
         // Scrolling down
         setIsVisible(false);
       } else {

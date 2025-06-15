@@ -24,10 +24,11 @@ export default function ProductCard({ product, lang }: ProductCardProps) {
       <Link href={productUrl} className="group flex-1 flex flex-col">
         <div className="relative aspect-square">
           <Image
-            src={product.image ? `/api/images/${product.image}` : "/placeholder.svg?height=400&width=400"}
+            src={product.thumbUrl ? `/api/images/${product.thumbUrl}` : (product.image ? `/api/images/${product.image}` : "/placeholder.svg?height=400&width=400")}
             alt={product.name[lang]}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
           />
         </div>
         <div className={`p-4 ${lang === "ar" ? "text-right" : ""} text-black`}>
