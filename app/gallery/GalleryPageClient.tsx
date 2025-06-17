@@ -17,6 +17,7 @@ interface GalleryImage {
 export default function GalleryPageClient({ images }: { images: GalleryImage[] }) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang") === "ar" ? "ar" : "en";
+  const initialCategory = searchParams.get("category");
 
   // Group images by category
   const categoryMap: Record<string, GalleryImage[]> = {};
@@ -26,7 +27,7 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
     categoryMap[img.category].push(img);
   });
   const categories = Object.keys(categoryMap);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory || null);
   // For pagination, responsive to screen size
   const getInitialVisibleCount = () => {
     if (typeof window !== 'undefined' && window.innerWidth < 640) {
@@ -54,8 +55,9 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
         <div className="flex mb-8">
           <button
             onClick={() => { setSelectedCategory(null); setVisibleCount(getInitialVisibleCount()); }}
-            className="mr-4 px-4 py-1 rounded-full border text-sm font-semibold bg-primary text-white border-primary"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
             {lang === 'ar' ? 'العودة' : 'Back'}
           </button>
           <h1 className={`text-3xl font-bold text-primary w-full ${lang === 'ar' ? 'text-right' : 'text-left'}`}>{selectedCategory}</h1>

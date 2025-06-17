@@ -220,7 +220,10 @@ export async function getGalleryImages(): Promise<GalleryImage[]> {
   try {
     const { db } = await connectToDatabase()
     const images = await db.collection(collections.gallery).find({}).toArray()
-    return images.map(doc => convertId(doc) as any)
+    console.log('Raw gallery images:', images);
+    const converted = images.map(doc => convertId(doc) as any)
+    console.log('Converted gallery images:', converted);
+    return converted
   } catch (error) {
     console.error("Error fetching gallery images:", error)
     return []

@@ -3,6 +3,8 @@
 import { Product } from "@/lib/data"
 import { notFound, useSearchParams } from "next/navigation"
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 
 interface ProductPageClientProps {
   product: Product
@@ -18,9 +20,17 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-end mb-8"></div>
+      <div className="flex items-center mb-8">
+        <Link
+          href={`/products/${product.categorySlug}/${product.subcategorySlug || ''}?lang=${lang}`}
+          className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          {lang === 'ar' ? 'العودة' : 'Back'}
+        </Link>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:max-w-[1000px] md:mx-auto">
         {/* Product Image */}
         <div className="relative aspect-square">
           {product.image ? (
@@ -38,7 +48,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         </div>
 
         {/* Product Details */}
-        <div className={`space-y-6 ${lang === "ar" ? "text-right" : ""} text-black bg-white border border-primary rounded-xl shadow p-8`}>
+        <div className={`space-y-6 ${lang === "ar" ? "text-right" : ""} text-black bg-white border border-primary rounded-xl shadow p-8 `}>
           <div>
             <h1 className="text-3xl font-bold mb-2 text-primary">
               {lang === "ar" ? product.name.ar : product.name.en}

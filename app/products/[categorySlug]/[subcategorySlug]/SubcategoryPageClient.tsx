@@ -27,7 +27,10 @@ export default function SubcategoryPageClient({
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center mb-8">
-        <Link href={`/products/${category.slug}?lang=${lang}`} className="hidden md:inline-flex items-center gap-2 text-primary hover:underline font-medium mr-4">
+        <Link
+          href={`/products/${category.slug}?lang=${lang}`}
+          className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+        >
           <ArrowLeft className="w-5 h-5" />
           {lang === 'ar' ? 'العودة' : 'Back'}
         </Link>

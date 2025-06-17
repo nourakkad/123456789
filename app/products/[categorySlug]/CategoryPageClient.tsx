@@ -5,7 +5,8 @@ import { notFound, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import ProductCard from "@/components/product-card"
 import Image from "next/image"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
 
 interface SubcategoryWithLogo {
   id: string
@@ -26,6 +27,55 @@ interface CategoryPageClientProps {
   products?: Product[]
 }
 
+// ReadMoreText component for mobile
+function ReadMoreText({ text, lang }: { text: string, lang: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const maxLines = 3;
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (expanded && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [expanded]);
+
+  return (
+    <div className="mb-6" ref={ref}>
+      <div
+        className={`transition-all duration-300 overflow-hidden ${expanded ? '' : 'max-h-20'}`}
+        style={!expanded ? { display: '-webkit-box', WebkitLineClamp: maxLines, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
+      >
+        <p
+          className={`text-black text-base whitespace-pre-line ${expanded ? '' : 'line-clamp-3'}`}
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+        >
+          {text}
+        </p>
+      </div>
+      {!expanded && (
+        <button
+          className="mt-1 text-primary underline text-sm font-medium flex items-center gap-1 focus:outline-none hover:text-green-700 transition-colors"
+          aria-expanded="false"
+          onClick={e => { e.stopPropagation(); e.preventDefault(); setExpanded(true); }}
+        >
+          {lang === 'ar' ? 'اقرأ المزيد' : 'Read more'}
+          <ChevronDown className="w-4 h-4" />
+        </button>
+      )}
+      {expanded && (
+        <button
+          className="mt-1 text-primary underline text-sm font-medium flex items-center gap-1 focus:outline-none hover:text-green-700 transition-colors"
+          aria-expanded="true"
+          onClick={e => { e.stopPropagation(); e.preventDefault(); setExpanded(false); }}
+        >
+          {lang === 'ar' ? 'إخفاء' : 'Show less'}
+          <ChevronUp className="w-4 h-4" />
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function CategoryPageClient({ category, products }: CategoryPageClientProps) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang") === "ar" ? "ar" : "en";
@@ -39,7 +89,10 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center mb-8">
-          <Link href="/products" className="hidden md:inline-flex items-center gap-2 text-primary hover:underline font-medium mr-4">
+          <Link
+            href="/products"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+          >
             <ArrowLeft className="w-5 h-5" />
             {lang === 'ar' ? 'العودة' : 'Back'}
           </Link>
@@ -58,9 +111,10 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
         
         <div className="flex flex-col gap-8">
           {category.subcategories.map((subcategory) => (
-            <div
+            <Link
               key={subcategory.id}
-              className="w-full bg-white border border-primary rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row transition-transform duration-300 group-hover:scale-105 min-h-[320px]"
+              href={`/products/${category.slug}/${subcategory.slug}?lang=${lang}`}
+              className="w-full bg-white border border-primary rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none min-h-[320px] group"
             >
               {/* Left: Image */}
               <div className="md:w-[30%] w-full flex items-center justify-center bg-gray-100 p-6 md:p-0">
@@ -83,20 +137,19 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
                   </div>
                 )}
                 {subcategory.description && (subcategory.description.en || subcategory.description.ar) && (
-                  <p className="text-black text-lg mb-6 whitespace-pre-line" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-                    {lang === 'ar' ? subcategory.description.ar : subcategory.description.en}
-                  </p>
+                  <>
+                    {/* Mobile: Read More toggle */}
+                    <div className="block md:hidden">
+                      <ReadMoreText text={lang === 'ar' ? subcategory.description.ar || '' : subcategory.description.en || ''} lang={lang} />
+                    </div>
+                    {/* Desktop: Full text */}
+                    <p className="hidden md:block text-black text-lg mb-6 whitespace-pre-line" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+                      {lang === 'ar' ? subcategory.description.ar : subcategory.description.en}
+                    </p>
+                  </>
                 )}
-                <div className="flex justify-start">
-                  <a
-                      href={`/products/${category.slug}/${subcategory.slug}?lang=${lang}`}
-                      className="inline-block px-3 py-1 border border-primary font-semibold text-primary text-xs rounded hover:bg-primary hover:text-white transition-colors duration-150 whitespace-nowrap">
-                      
-                        {lang === 'ar' ? 'عرض المنتجات' : 'View Products'}
-                  </a>
-                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -109,7 +162,10 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center mb-8">
-        <Link href="/products" className="hidden md:inline-flex items-center gap-2 text-primary hover:underline font-medium mr-4">
+        <Link
+          href="/products"
+          className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+        >
           <ArrowLeft className="w-5 h-5" />
           {lang === 'ar' ? 'العودة' : 'Back'}
         </Link>
@@ -117,7 +173,7 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
+        {(products || []).map((product) => (
           <ProductCard key={product.id} product={product} lang={lang} />
         ))}
       </div>
