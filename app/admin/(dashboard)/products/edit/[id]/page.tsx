@@ -2,11 +2,10 @@
 
 import type React from "react"
 import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -30,6 +29,15 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     setIsSubmitting(true)
     const formData = new FormData(event.currentTarget)
     formData.append("id", params.id)
+    // Append multilingual fields
+    formData.set("name_en", formData.get("name_en") || "")
+    formData.set("name_ar", formData.get("name_ar") || "")
+    formData.set("description_en", formData.get("description_en") || "")
+    formData.set("description_ar", formData.get("description_ar") || "")
+    formData.set("category_en", formData.get("category_en") || "")
+    formData.set("category_ar", formData.get("category_ar") || "")
+    formData.set("subcategory_en", formData.get("subcategory_en") || "")
+    formData.set("subcategory_ar", formData.get("subcategory_ar") || "")
     try {
       await updateProduct(formData)
       toast({ title: "Product updated", description: "The product has been updated successfully." })
@@ -57,48 +65,42 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Product Name</Label>
-                <Input id="name" name="name" defaultValue={product.name} required />
+                <Label htmlFor="name_en">Product Name (EN)</Label>
+                <Input id="name_en" name="name_en" defaultValue={product.name?.en || ""} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="price">Price</Label>
-                <Input id="price" name="price" type="number" step="0.01" defaultValue={product.price} required />
+                <Label htmlFor="name_ar">Product Name (AR)</Label>
+                <Input id="name_ar" name="name_ar" defaultValue={product.name?.ar || ""} required />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea id="description" name="description" rows={4} defaultValue={product.description} required />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select name="category" defaultValue={product.category}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="furniture">Furniture</SelectItem>
-                    <SelectItem value="electronics">Electronics</SelectItem>
-                    <SelectItem value="kitchen">Kitchen</SelectItem>
-                    <SelectItem value="accessories">Accessories</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="description_en">Description (EN)</Label>
+                <Textarea id="description_en" name="description_en" rows={4} defaultValue={product.description?.en || ""} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="subcategory">Subcategory</Label>
-                <Select name="subcategory" defaultValue={product.subcategory}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select subcategory" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="office">Office</SelectItem>
-                    <SelectItem value="living-room">Living Room</SelectItem>
-                    <SelectItem value="lighting">Lighting</SelectItem>
-                    <SelectItem value="audio">Audio</SelectItem>
-                    <SelectItem value="wearables">Wearables</SelectItem>
-                    <SelectItem value="computers">Computers</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="description_ar">Description (AR)</Label>
+                <Textarea id="description_ar" name="description_ar" rows={4} defaultValue={product.description?.ar || ""} required />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="category_en">Category (EN)</Label>
+                <Input id="category_en" name="category_en" defaultValue={product.category?.en || ""} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="category_ar">Category (AR)</Label>
+                <Input id="category_ar" name="category_ar" defaultValue={product.category?.ar || ""} required />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="subcategory_en">Subcategory (EN)</Label>
+                <Input id="subcategory_en" name="subcategory_en" defaultValue={product.subcategory?.en || ""} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="subcategory_ar">Subcategory (AR)</Label>
+                <Input id="subcategory_ar" name="subcategory_ar" defaultValue={product.subcategory?.ar || ""} />
               </div>
             </div>
             <div className="space-y-2">

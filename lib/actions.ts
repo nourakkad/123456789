@@ -216,21 +216,29 @@ export async function updateProduct(formData: FormData) {
   try {
     const { db } = await connectToDatabase()
     const id = formData.get("id") as string
-    const name = formData.get("name") as string
-    const description = formData.get("description") as string
-    const category = formData.get("category") as string
-    const subcategory = formData.get("subcategory") as string
-    const slug = generateSlug(name)
-    const categorySlug = generateSlug(category)
-    const subcategorySlug = subcategory ? generateSlug(subcategory) : undefined
+    // Get multilingual fields
+    const name = {
+      en: formData.get("name_en")?.toString() || "",
+      ar: formData.get("name_ar")?.toString() || "",
+    };
+    const description = {
+      en: formData.get("description_en")?.toString() || "",
+      ar: formData.get("description_ar")?.toString() || "",
+    };
+    const category = {
+      en: formData.get("category_en")?.toString() || "",
+      ar: formData.get("category_ar")?.toString() || "",
+    };
+    const subcategory = {
+      en: formData.get("subcategory_en")?.toString() || "",
+      ar: formData.get("subcategory_ar")?.toString() || "",
+    };
+    const slug = generateSlug(name.en || "")
+    const categorySlug = generateSlug(category.en || "")
+    const subcategorySlug = subcategory.en ? generateSlug(subcategory.en) : undefined
     // Validate update
     const parsed = ProductSchema.partial().safeParse({
-      name: { en: name, ar: name },
-      description: { en: description, ar: description },
-      category: { en: category, ar: category },
-      categorySlug,
-      subcategory: { en: subcategory, ar: subcategory },
-      subcategorySlug,
+      name, description, category, categorySlug, subcategory, subcategorySlug,
     });
     if (!parsed.success) {
       throw new Error(parsed.error.errors.map(e => e.message).join(", "));
@@ -241,7 +249,7 @@ export async function updateProduct(formData: FormData) {
       description,
       category,
       categorySlug,
-      subcategory: subcategory || undefined,
+      subcategory: subcategory.en ? subcategory : undefined,
       subcategorySlug,
       updatedAt: new Date().toISOString(),
     }

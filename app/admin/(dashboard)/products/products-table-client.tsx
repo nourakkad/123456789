@@ -84,6 +84,9 @@ export default function ProductsTableClient({ products }: ProductsTableClientPro
               <td className="px-2 md:px-6 py-2 md:py-4 whitespace-nowrap">{product.category.en}</td>
               <td className="px-2 md:px-6 py-2 md:py-4 whitespace-nowrap">{product.category.ar}</td>
               <td className="px-2 md:px-6 py-2 md:py-4 whitespace-nowrap flex gap-2">
+                <Link href={`/admin/products/edit/${product.id}`}>
+                  <Button variant="outline" size="sm">Edit</Button>
+                </Link>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="sm">Delete</Button>
