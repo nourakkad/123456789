@@ -63,7 +63,12 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
   }
-}
+/* Override background image for mobile devices */
+@media (max-width: 767px) {
+  body {
+    background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), url('/uploads/background1.jpg');
+  }
+}}
 
 /* Force light mode for dashboard */
 .force-light-mode {
