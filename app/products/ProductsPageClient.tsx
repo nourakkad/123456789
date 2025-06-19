@@ -23,7 +23,7 @@ export default function ProductsPageClient({ categories = [] }: { categories: Ca
             key={category.id}
             className="group"
           >
-            <div className="flex flex-col items-center justify-center min-h-[140px] bg-white border-2 border-primary/30 rounded-xl shadow-lg shadow-primary/10 transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
+            <div className="flex flex-col items-center justify-center min-h-[140px] bg-white/50 backdrop-blur-sm border-2 border-primary/30 rounded-xl shadow-lg shadow-primary/10 transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
               <div className="flex flex-col items-center justify-center w-full p-4 md:p-8">
                 {lang === "ar" ? (
                   <h2 dir="rtl" className="text-2xl font-bold mb-2 text-center text-primary">{category.name.ar}</h2>

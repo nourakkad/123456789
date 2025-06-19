@@ -59,6 +59,16 @@ const CategorySchema = z.object({
     name: z.object({ en: z.string().min(2), ar: z.string().min(2) }),
     slug: z.string().min(2),
     logo: z.string().optional(),
+    description: z.object({ en: z.string().optional(), ar: z.string().optional() }).optional(),
+    slogan: z.object({ en: z.string().optional(), ar: z.string().optional() }).optional(),
+    benefits: z.array(z.object({
+      image: z.string().optional(),
+      description_en: z.string().optional(),
+      description_ar: z.string().optional(),
+    })).optional(),
+    colors: z.array(z.object({
+      image: z.string().optional(),
+    })).optional(),
   })).optional(),
   description: z.object({ en: z.string().min(5), ar: z.string().min(5) }),
 });
@@ -313,12 +323,12 @@ export async function createCategory(formData: FormData) {
     const subcategoriesRaw = formData.get("subcategories") as string | null
     if (subcategoriesRaw) {
       try {
-        const names: { en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string }[] = JSON.parse(subcategoriesRaw)
+        const names: { id?: string; en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string; benefits?: any[]; colors?: any[] }[] = JSON.parse(subcategoriesRaw)
         if (Array.isArray(names)) {
           subcategories = names
             .filter((n) => n && n.en && n.ar)
             .map((n) => ({
-              id: new ObjectId().toString(),
+              id: n.id || new ObjectId().toString(),
               name: { en: n.en, ar: n.ar },
               slug: generateSlug(n.en),
               logo: n.logo,
@@ -329,7 +339,15 @@ export async function createCategory(formData: FormData) {
               slogan: {
                 en: n.slogan_en || "",
                 ar: n.slogan_ar || ""
-              }
+              },
+              benefits: Array.isArray(n.benefits) ? n.benefits.map(b => ({
+                image: b.image,
+                description_en: b.description_en || "",
+                description_ar: b.description_ar || "",
+              })) : [],
+              colors: Array.isArray(n.colors) ? n.colors.map(c => ({
+                image: c.image,
+              })) : [],
             }))
         }
       } catch (e) {
@@ -375,7 +393,7 @@ export async function updateCategory(formData: FormData) {
     const subcategoriesRaw = formData.get("subcategories") as string | null;
     if (subcategoriesRaw) {
       try {
-        const names: { id?: string; en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string }[] = JSON.parse(subcategoriesRaw);
+        const names: { id?: string; en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string; benefits?: any[]; colors?: any[] }[] = JSON.parse(subcategoriesRaw);
         if (Array.isArray(names)) {
           subcategories = names
             .filter((n) => n && n.en && n.ar)
@@ -391,7 +409,15 @@ export async function updateCategory(formData: FormData) {
               slogan: {
                 en: n.slogan_en || "",
                 ar: n.slogan_ar || ""
-              }
+              },
+              benefits: Array.isArray(n.benefits) ? n.benefits.map(b => ({
+                image: b.image,
+                description_en: b.description_en || "",
+                description_ar: b.description_ar || "",
+              })) : [],
+              colors: Array.isArray(n.colors) ? n.colors.map(c => ({
+                image: c.image,
+              })) : [],
             }))
         }
       } catch (e) {

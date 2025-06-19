@@ -23,7 +23,7 @@ export default function GalleryImageClient({ image, prevImage, nextImage, lang }
         {(!nextImage || !(nextImage.id || nextImage._id)) ? (
           <Link
             href={{ pathname: "/gallery", query: { category: image.category, lang } }}
-            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <ChevronLeft className="h-5 w-5 mr-2 text-primary" />
             {lang === 'ar' ? 'العودة' : 'Back'}
@@ -32,7 +32,7 @@ export default function GalleryImageClient({ image, prevImage, nextImage, lang }
           <button
             type="button"
             onClick={() => (typeof window !== 'undefined' ? window.history.back() : null)}
-            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <ChevronLeft className="h-5 w-5 mr-2 text-primary" />
             {lang === 'ar' ? 'العودة' : 'Back'}
@@ -55,7 +55,7 @@ export default function GalleryImageClient({ image, prevImage, nextImage, lang }
           <h1 className="text-3xl font-bold text-primary">{getLangField(image.title, lang)}</h1>
 
           <div className="space-y-4">
-            <div className="border border-primary rounded-xl bg-white p-4">
+            <div className="border border-primary rounded-xl bg-white/50 backdrop-blur-sm p-4">
               <p className="text-black whitespace-pre-line">{getLangField(image.description, lang)}</p>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function GalleryImageClient({ image, prevImage, nextImage, lang }
             {prevImage && (prevImage.id || prevImage._id) && (
               <Link
                 href={{ pathname: `/gallery/${prevImage.id || prevImage._id}`, query: { lang } }}
-                className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {lang === 'ar' ? 'السابق' : 'Previous'}
               </Link>
@@ -73,7 +73,7 @@ export default function GalleryImageClient({ image, prevImage, nextImage, lang }
             {nextImage && (nextImage.id || nextImage._id) && (
               <Link
                 href={{ pathname: `/gallery/${nextImage.id || nextImage._id}`, query: { lang } }}
-                className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                 {lang === 'ar' ? 'التالي' : 'Next'}
               </Link>

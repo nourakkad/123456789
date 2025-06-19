@@ -55,7 +55,7 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
         <div className="flex mb-8">
           <button
             onClick={() => { setSelectedCategory(null); setVisibleCount(getInitialVisibleCount()); }}
-            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
             {lang === 'ar' ? 'العودة' : 'Back'}
@@ -66,14 +66,14 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
           <div className="text-center text-gray-500 py-12">{lang === 'ar' ? 'لا توجد صور في هذا القسم' : 'No images in this category.'}</div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {visibleImages.map((image) => (
                 <Link
                   key={image.id}
                   href={{ pathname: `/gallery/${image.id}`, query: { lang } }}
                   className="group"
                 >
-                  <div className="border border-primary rounded-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 max-w-xs mx-auto">
+                  <div className="border border-primary rounded-lg overflow-hidden bg-white/50 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 max-w-xs mx-auto">
                     <div className="relative w-full aspect-square min-h-[140px] max-h-[180px]">
                       <Image
                         src={`/api/images/${image.thumbUrl || image.url}`}
@@ -126,19 +126,19 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
       {categories.length === 0 ? (
         <div className="text-center text-gray-500 py-12">{lang === 'ar' ? 'لا توجد أقسام للصور' : 'No gallery categories found.'}</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat) => {
             const catImages = categoryMap[cat].slice(0, 4); // up to 4 mini images
             return (
               <button
                 key={cat}
                 onClick={() => { setSelectedCategory(cat); setVisibleCount(getInitialVisibleCount()); }}
-                className="w-full max-w-xs mx-auto text-left group border border-primary rounded-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 focus:outline-none"
+                className="w-full max-w-xs mx-auto text-left group border border-primary rounded-lg overflow-hidden bg-white/50 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 focus:outline-none"
               >
                 <div className="p-2 border-b border-primary bg-primary/10">
                   <span className="text-base font-bold text-primary">{cat}</span>
                 </div>
-                <div className="grid grid-cols-2 gap-0.5 p-1 aspect-square bg-white min-h-[120px] max-h-[140px]">
+                <div className="grid grid-cols-2 gap-0.5 p-1 aspect-square bg-white/50 backdrop-blur-sm min-h-[120px] max-h-[140px]">
                   {catImages.map((img) => (
                     <div key={img.id} className="relative w-full aspect-square rounded overflow-hidden">
                       <Image

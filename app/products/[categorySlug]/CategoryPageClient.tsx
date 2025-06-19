@@ -91,7 +91,7 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
         <div className="flex items-center mb-8">
           <Link
             href="/products"
-            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <ArrowLeft className="w-5 h-5" />
             {lang === 'ar' ? 'العودة' : 'Back'}
@@ -101,7 +101,7 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
         
         {category.description && (category.description.en || category.description.ar) && (
           <div className="mb-8">
-            <div className="bg-white border border-primary rounded-lg shadow p-6">
+            <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6">
               <p className="text-black whitespace-pre-line" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
                 {lang === 'ar' ? category.description.ar : category.description.en}
               </p>
@@ -114,7 +114,7 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
             <Link
               key={subcategory.id}
               href={`/products/${category.slug}/${subcategory.slug}?lang=${lang}`}
-              className="w-full bg-white border border-primary rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none min-h-[320px] group"
+              className="w-full bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none min-h-[320px] group"
             >
               {/* Left: Image */}
               <div className="md:w-[30%] w-full flex items-center justify-center bg-gray-100 p-6 md:p-0">
@@ -164,7 +164,7 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
       <div className="flex items-center mb-8">
         <Link
           href="/products"
-          className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <ArrowLeft className="w-5 h-5" />
           {lang === 'ar' ? 'العودة' : 'Back'}

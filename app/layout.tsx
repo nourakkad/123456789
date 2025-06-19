@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { getSettings, getHomepageSettings } from "@/lib/data"
 import { getCategories } from "@/lib/data"
 import { Toaster } from "@/components/ui/toaster"
+import { usePathname } from "next/navigation"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -41,6 +42,8 @@ export default async function RootLayout({
   const ourStory = homepageSettings?.ourStory || { en: "", ar: "" }
   const logo = settings?.logo || ""
 
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} style={{ position: 'relative' }}>
@@ -68,12 +71,15 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Header 
-              siteName={siteName} 
-              siteDescription={siteDescription} 
-              categories={categories}
-              logo={logo}
-            />
+            {/* Conditionally render Header */}
+            {pathname !== "/contact-card-shady" && (
+              <Header 
+                siteName={siteName} 
+                siteDescription={siteDescription} 
+                categories={categories}
+                logo={logo}
+              />
+            )}
             <main className="min-h-screen pt-16">
               {children}
             </main>

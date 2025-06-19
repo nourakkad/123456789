@@ -49,6 +49,101 @@ export default function EditCategoryPage() {
     reader.readAsDataURL(file);
   }
 
+  function handleSubcategoryBenefitChange(subIdx: number, benefitIdx: number, key: string, value: string) {
+    setSubcategories((subs) =>
+      subs.map((s, i) =>
+        i === subIdx
+          ? {
+              ...s,
+              benefits: (s.benefits || []).map((b: any, j: number) =>
+                j === benefitIdx ? { ...b, [key]: value } : b
+              ),
+            }
+          : s
+      )
+    );
+  }
+
+  function handleSubcategoryBenefitImageChange(subIdx: number, benefitIdx: number, file: File | null) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSubcategories((subs) =>
+        subs.map((s, i) =>
+          i === subIdx
+            ? {
+                ...s,
+                benefits: (s.benefits || []).map((b: any, j: number) =>
+                  j === benefitIdx ? { ...b, imageFile: file, imagePreview: reader.result as string } : b
+                ),
+              }
+            : s
+        )
+      );
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleAddBenefit(subIdx: number) {
+    setSubcategories((subs) =>
+      subs.map((s, i) =>
+        i === subIdx
+          ? { ...s, benefits: [...(s.benefits || []), { image: '', imageFile: null, imagePreview: null, description_en: '', description_ar: '' }] }
+          : s
+      )
+    );
+  }
+
+  function handleRemoveBenefit(subIdx: number, benefitIdx: number) {
+    setSubcategories((subs) =>
+      subs.map((s, i) =>
+        i === subIdx
+          ? { ...s, benefits: (s.benefits || []).filter((_: any, j: number) => j !== benefitIdx) }
+          : s
+      )
+    );
+  }
+
+  function handleSubcategoryColorImageChange(subIdx: number, colorIdx: number, file: File | null) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSubcategories((subs) =>
+        subs.map((s, i) =>
+          i === subIdx
+            ? {
+                ...s,
+                colors: (s.colors || []).map((c: any, j: number) =>
+                  j === colorIdx ? { ...c, imageFile: file, imagePreview: reader.result as string } : c
+                ),
+              }
+            : s
+        )
+      );
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleAddColor(subIdx: number) {
+    setSubcategories((subs) =>
+      subs.map((s, i) =>
+        i === subIdx
+          ? { ...s, colors: [...(s.colors || []), { image: '', imageFile: null, imagePreview: null }] }
+          : s
+      )
+    );
+  }
+
+  function handleRemoveColor(subIdx: number, colorIdx: number) {
+    setSubcategories((subs) =>
+      subs.map((s, i) =>
+        i === subIdx
+          ? { ...s, colors: (s.colors || []).filter((_: any, j: number) => j !== colorIdx) }
+          : s
+      )
+    );
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
@@ -69,6 +164,42 @@ export default function EditCategoryPage() {
           updatedSubs[i].logo = data.id;
         }
       }
+      // Upload benefit images
+      if (Array.isArray(sub.benefits)) {
+        for (let j = 0; j < sub.benefits.length; j++) {
+          const benefit = sub.benefits[j];
+          if (benefit.imageFile) {
+            const benefitForm = new FormData();
+            benefitForm.append("file", benefit.imageFile);
+            const response = await fetch("/api/images/upload", {
+              method: "POST",
+              body: benefitForm,
+            });
+            if (response.ok) {
+              const data = await response.json();
+              updatedSubs[i].benefits[j].image = data.id;
+            }
+          }
+        }
+      }
+      // Upload color images
+      if (Array.isArray(sub.colors)) {
+        for (let j = 0; j < sub.colors.length; j++) {
+          const color = sub.colors[j];
+          if (color.imageFile) {
+            const colorForm = new FormData();
+            colorForm.append("file", color.imageFile);
+            const response = await fetch("/api/images/upload", {
+              method: "POST",
+              body: colorForm,
+            });
+            if (response.ok) {
+              const data = await response.json();
+              updatedSubs[i].colors[j].image = data.id;
+            }
+          }
+        }
+      }
     }
     // Prepare subcategories for backend
     const subcategoriesToSend = updatedSubs.map((s) => ({
@@ -80,6 +211,14 @@ export default function EditCategoryPage() {
       description_ar: s.description?.ar || s.description_ar || "",
       slogan_en: s.slogan?.en || s.slogan_en || "",
       slogan_ar: s.slogan?.ar || s.slogan_ar || "",
+      benefits: (s.benefits || []).map((b: any) => ({
+        image: b.image,
+        description_en: b.description_en || "",
+        description_ar: b.description_ar || "",
+      })),
+      colors: (s.colors || []).map((c: any) => ({
+        image: c.image,
+      })),
     }));
     formData.set("subcategories", JSON.stringify(subcategoriesToSend));
     formData.set("id", category.id || category._id);
@@ -174,6 +313,68 @@ export default function EditCategoryPage() {
                 <Image src={`/api/images/${sub.logo}`} alt="Logo" fill className="object-contain rounded" />
               </div>
             ) : null}
+            {/* Benefits Section */}
+            <div className="mt-2">
+              <Label>Benefits (optional)</Label>
+              {(sub.benefits || []).map((benefit: any, bIdx: number) => (
+                <div key={bIdx} className="flex flex-col gap-2 border p-2 rounded-md mb-2 bg-gray-50">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={e => handleSubcategoryBenefitImageChange(idx, bIdx, e.target.files?.[0] || null)}
+                    className="w-40"
+                  />
+                  {benefit.imagePreview ? (
+                    <div className="relative w-16 h-16">
+                      <Image src={benefit.imagePreview} alt="Benefit preview" fill className="object-contain rounded" />
+                    </div>
+                  ) : benefit.image ? (
+                    <div className="relative w-16 h-16">
+                      <Image src={`/api/images/${benefit.image}`} alt="Benefit" fill className="object-contain rounded" />
+                    </div>
+                  ) : null}
+                  <textarea
+                    value={benefit.description_en || ""}
+                    onChange={e => handleSubcategoryBenefitChange(idx, bIdx, "description_en", e.target.value)}
+                    placeholder="Benefit Description (English)"
+                    className="w-full border rounded p-2 min-h-[40px]"
+                  />
+                  <textarea
+                    value={benefit.description_ar || ""}
+                    onChange={e => handleSubcategoryBenefitChange(idx, bIdx, "description_ar", e.target.value)}
+                    placeholder="Benefit Description (Arabic)"
+                    className="w-full border rounded p-2 min-h-[40px]"
+                  />
+                  <Button type="button" variant="destructive" size="sm" onClick={() => handleRemoveBenefit(idx, bIdx)}>Remove Benefit</Button>
+                </div>
+              ))}
+              <Button type="button" variant="outline" size="sm" onClick={() => handleAddBenefit(idx)}>Add Benefit</Button>
+            </div>
+            {/* Colors Section */}
+            <div className="mt-2">
+              <Label>Colors (optional)</Label>
+              {(sub.colors || []).map((color: any, cIdx: number) => (
+                <div key={cIdx} className="flex flex-col gap-2 border p-2 rounded-md mb-2 bg-gray-50">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={e => handleSubcategoryColorImageChange(idx, cIdx, e.target.files?.[0] || null)}
+                    className="w-40"
+                  />
+                  {color.imagePreview ? (
+                    <div className="relative w-16 h-16">
+                      <Image src={color.imagePreview} alt="Color preview" fill className="object-contain rounded" />
+                    </div>
+                  ) : color.image ? (
+                    <div className="relative w-16 h-16">
+                      <Image src={`/api/images/${color.image}`} alt="Color" fill className="object-contain rounded" />
+                    </div>
+                  ) : null}
+                  <Button type="button" variant="destructive" size="sm" onClick={() => handleRemoveColor(idx, cIdx)}>Remove Color</Button>
+                </div>
+              ))}
+              <Button type="button" variant="outline" size="sm" onClick={() => handleAddColor(idx)}>Add Color</Button>
+            </div>
           </div>
         ))}
         <div className="flex gap-4">

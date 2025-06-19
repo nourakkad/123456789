@@ -22,7 +22,7 @@ export default function ProductCard({ product, lang, small }: ProductCardProps) 
 
   if (small) {
     return (
-      <div className="bg-white rounded-xl shadow border border-gray-200 hover:border-primary hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden group max-w-sm mx-auto">
+      <div className="bg-white/50 backdrop-blur-sm rounded-xl shadow border border-gray-200 hover:border-primary hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden group max-w-sm mx-auto">
         <Link href={productUrl} className="flex flex-col h-full">
           <div className="relative w-80 h-80 bg-gray-100">
             <Image
@@ -47,7 +47,7 @@ export default function ProductCard({ product, lang, small }: ProductCardProps) 
   }
   // Default (large) card
   return (
-    <div className="border border-primary rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 bg-white flex flex-col h-full">
+    <div className="border border-primary rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 bg-white/50 backdrop-blur-sm flex flex-col h-full">
       <Link href={productUrl} className="group flex-1 flex flex-col">
         <div className="relative aspect-square">
           <Image
