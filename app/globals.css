@@ -55,20 +55,43 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    position: relative;
+    z-index: 0; /* makes sure content stacks above ::before */
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), url('/uploads/background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    z-index: -10;
+    pointer-events: none;
   }
-/* Override background image for mobile devices */
-@media (max-width: 767px) {
-  body {
-    background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), url('/uploads/background1.jpg');
+
+  @media (max-width: 767px) {
+    body::before {
+      background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), url('/uploads/background1.jpg');
+    }
   }
-}}
+}
+h1 {
+  color: black ;
+}
+h2 {
+  color: black ;
+}
+
+h3 {
+  color: black ;
+}
 
 /* Force light mode for dashboard */
 .force-light-mode {
