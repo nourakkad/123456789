@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -28,70 +28,92 @@
     --radius: 0.5rem;
   }
 
+  /* REMOVE DARK MODE STYLES */
+  /*
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    ... (deleted or commented out)
   }
-}
+  */
 
-@layer base {
   * {
     @apply border-border;
+    color-scheme: light !important;
   }
+
   body {
-    @apply bg-background text-foreground;
+    position: relative;
+    z-index: 0;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), url('/uploads/background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    z-index: -10;
+    pointer-events: none;
   }
-}
 
-/* Force light mode for dashboard */
-.force-light-mode {
-  --background: 0 0% 100% !important;
-  --foreground: 222.2 84% 4.9% !important;
-  --card: 0 0% 100% !important;
-  --card-foreground: 222.2 84% 4.9% !important;
-  --popover: 0 0% 100% !important;
-  --popover-foreground: 222.2 84% 4.9% !important;
-  --primary: 221.2 83.2% 53.3% !important;
-  --primary-foreground: 210 40% 98% !important;
-  --secondary: 210 40% 96.1% !important;
-  --secondary-foreground: 222.2 47.4% 11.2% !important;
-  --muted: 210 40% 96.1% !important;
-  --muted-foreground: 215.4 16.3% 46.9% !important;
-  --accent: 210 40% 96.1% !important;
-  --accent-foreground: 222.2 47.4% 11.2% !important;
-  --border: 214.3 31.8% 91.4% !important;
-  --input: 214.3 31.8% 91.4% !important;
-  --ring: 221.2 83.2% 53.3% !important;
-}
+  @media (max-width: 767px) {
+    body::before {
+      background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), url('/uploads/background1.jpg');
+    }
+  }
+ 
 
-.force-light-mode * {
-  color-scheme: light !important;
-}
+  [lang="ar"], .font-arabic {
+    font-family: 'Cairo', 'Tajawal', Tahoma, sans-serif;
+    font-size: 1.15em;
+    line-height: 1.8;
+    font-weight: 600;
+  }
 
-[lang="ar"], .font-arabic {
-  font-family: 'IBM Plex Arabic', Tahoma, Arial, sans-serif !important;
-  font-size: 1.18em !important;
-  line-height: 1.8 !important;
+  [lang="ar"] h1, .font-arabic h1 {
+    font-weight: 700;
+    font-size: 2em;
+  }
+
+  [lang="ar"] h2, .font-arabic h2 {
+    font-weight: 600;
+    font-size: 1.5em;
+  }
+
+  [lang="ar"] h3, .font-arabic h3 {
+    font-weight: 500;
+    font-size: 1.3em;
+  }
+
+  /* Ensure force-light-mode has global impact */
+  .force-light-mode {
+    --background: 0 0% 100% !important;
+    --foreground: 222.2 84% 4.9% !important;
+    --card: 0 0% 100% !important;
+    --card-foreground: 222.2 84% 4.9% !important;
+    --popover: 0 0% 100% !important;
+    --popover-foreground: 222.2 84% 4.9% !important;
+    --primary: 221.2 83.2% 53.3% !important;
+    --primary-foreground: 210 40% 98% !important;
+    --secondary: 210 40% 96.1% !important;
+    --secondary-foreground: 222.2 47.4% 11.2% !important;
+    --muted: 210 40% 96.1% !important;
+    --muted-foreground: 215.4 16.3% 46.9% !important;
+    --accent: 210 40% 96.1% !important;
+    --accent-foreground: 222.2 47.4% 11.2% !important;
+    --border: 214.3 31.8% 91.4% !important;
+    --input: 214.3 31.8% 91.4% !important;
+    --ring: 221.2 83.2% 53.3% !important;
+    color-scheme: light !important;
+  }
+
+  .force-light-mode * {
+    color-scheme: light !important;
+  }
 }

@@ -15,6 +15,7 @@ interface SubcategoryWithLogo {
   logo?: string
   description?: { en?: string; ar?: string }
   slogan?: { en?: string; ar?: string }
+  hardcodedPageSlug?: string
 }
 
 interface CategoryPageClientProps {
@@ -113,7 +114,11 @@ export default function CategoryPageClient({ category, products }: CategoryPageC
           {category.subcategories.map((subcategory) => (
             <Link
               key={subcategory.id}
-              href={`/products/${category.slug}/${subcategory.slug}?lang=${lang}`}
+              href={
+                subcategory.hardcodedPageSlug
+                  ? `/hardcoded-pages/${subcategory.hardcodedPageSlug}?categorySlug=${category.slug}&lang=${lang}`
+                  : `/products/${category.slug}/${subcategory.slug}?lang=${lang}`
+              }
               className="w-full bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none min-h-[320px] group"
             >
               {/* Left: Image */}

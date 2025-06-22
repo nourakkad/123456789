@@ -22,6 +22,7 @@ interface Subcategory {
   description_ar?: string
   slogan_en?: string
   slogan_ar?: string
+  hardcodedPageSlug?: string
 }
 
 export default function NewCategoryPage() {
@@ -65,7 +66,16 @@ export default function NewCategoryPage() {
     // Only send en, ar, logoUrl for each subcategory
     const subcategoriesToSend = subcats
       .filter(s => s.en.trim() !== "" && s.ar.trim() !== "")
-      .map(s => ({ en: s.en, ar: s.ar, logo: s.logoUrl || "", description_en: s.description_en, description_ar: s.description_ar, slogan_en: s.slogan_en, slogan_ar: s.slogan_ar }))
+      .map(s => ({
+        en: s.en,
+        ar: s.ar,
+        logo: s.logoUrl || "",
+        description_en: s.description_en,
+        description_ar: s.description_ar,
+        slogan_en: s.slogan_en,
+        slogan_ar: s.slogan_ar,
+        hardcodedPageSlug: s.hardcodedPageSlug
+      }))
     formData.set("subcategories", JSON.stringify(subcategoriesToSend))
 
     try {
@@ -94,7 +104,7 @@ export default function NewCategoryPage() {
     setSubcategories(subcategories.filter((_, i) => i !== idx))
   }
 
-  function handleSubcategoryChange(idx: number, lang: "en" | "ar" | "description_en" | "description_ar" | "slogan_en" | "slogan_ar", value: string) {
+  function handleSubcategoryChange(idx: number, lang: "en" | "ar" | "description_en" | "description_ar" | "slogan_en" | "slogan_ar" | "hardcodedPageSlug", value: string) {
     setSubcategories(subcategories.map((s, i) => i === idx ? { ...s, [lang]: value } : s))
   }
 
@@ -196,6 +206,13 @@ export default function NewCategoryPage() {
                     value={sub.slogan_ar || ''}
                     onChange={e => handleSubcategoryChange(idx, "slogan_ar", e.target.value)}
                     placeholder="Subcategory Slogan (Arabic)"
+                    className="w-full border rounded p-2"
+                  />
+                  <Input
+                    type="text"
+                    value={sub.hardcodedPageSlug || ''}
+                    onChange={e => handleSubcategoryChange(idx, "hardcodedPageSlug", e.target.value)}
+                    placeholder="Hardcoded Page Slug (optional)"
                     className="w-full border rounded p-2"
                   />
                   <Input

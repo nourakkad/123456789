@@ -9,7 +9,21 @@ import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import type { Category } from "@/lib/data"
 
-type MobileNavProps = { categories: Category[]; closeMenu?: () => void };
+type SubcategoryNav = {
+  id: string;
+  name: { en: string; ar: string };
+  slug: string;
+  hardcodedPageSlug?: string;
+};
+
+type CategoryNav = {
+  id: string;
+  name: { en: string; ar: string };
+  slug: string;
+  subcategories?: SubcategoryNav[];
+};
+
+type MobileNavProps = { categories: CategoryNav[]; closeMenu?: () => void };
 export default function MobileNav({ categories = [], closeMenu }: MobileNavProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams();
@@ -81,10 +95,14 @@ export default function MobileNav({ categories = [], closeMenu }: MobileNavProps
                   </Link>
                   {category.subcategories && category.subcategories.length > 0 && (
                     <div className="ml-4 border-l-2 border-primary/10 pl-3 mt-1 flex flex-col gap-1">
-                      {category.subcategories.map((sub) => (
+                      {(category.subcategories as SubcategoryNav[] | undefined)?.map((sub) => (
                         <Link
                           key={sub.id}
-                          href={`/products/${category.slug}/${sub.slug}?lang=${lang}`}
+                          href={
+                            sub.hardcodedPageSlug
+                              ? `/hardcoded-pages/${sub.hardcodedPageSlug}?categorySlug=${category.slug}&lang=${lang}`
+                              : `/products/${category.slug}/${sub.slug}?lang=${lang}`
+                          }
                           className={cn(
                             "block py-1 px-5 rounded text-sm font-normal transition-all duration-200 border-l-2 border-primary/10 ml-2",
                             pathname === `/products/${category.slug}/${sub.slug}` ? "bg-primary/10 text-primary" : "text-gray-600 hover:bg-primary/10 hover:text-primary"

@@ -186,7 +186,7 @@ export async function getRelatedProducts(productId: string, categorySlug: string
 export async function getCategories(): Promise<Category[]> {
   try {
     const { db } = await connectToDatabase()
-    const categories = await db.collection(collections.categories).find({}).toArray()
+    const categories = await db.collection(collections.categories).find({}).sort({ order: 1 }).toArray()
     return categories.map(doc => convertId(doc) as any)
   } catch (error) {
     console.error("Error fetching categories:", error)

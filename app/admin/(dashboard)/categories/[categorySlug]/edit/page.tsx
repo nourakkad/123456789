@@ -34,7 +34,33 @@ export default function EditCategoryPage() {
 
   function handleSubcategoryChange(idx: number, key: string, value: string) {
     setSubcategories((subs) =>
-      subs.map((s, i) => (i === idx ? { ...s, [key]: value } : s))
+      subs.map((s, i) => {
+        if (i !== idx) return s;
+        if (key === "en" || key === "ar") {
+          return {
+            ...s,
+            name: { ...(s.name || {}), [key]: value },
+            [key]: value, // for legacy support
+          };
+        }
+        if (key === "slogan_en" || key === "slogan_ar") {
+          const lang = key.endsWith("_ar") ? "ar" : "en";
+          return {
+            ...s,
+            slogan: { ...(s.slogan || {}), [lang]: value },
+            [key]: value, // for legacy support
+          };
+        }
+        if (key === "description_en" || key === "description_ar") {
+          const lang = key.endsWith("_ar") ? "ar" : "en";
+          return {
+            ...s,
+            description: { ...(s.description || {}), [lang]: value },
+            [key]: value, // for legacy support
+          };
+        }
+        return { ...s, [key]: value };
+      })
     );
   }
 
@@ -144,6 +170,30 @@ export default function EditCategoryPage() {
     );
   }
 
+  function handleAddSubcategory() {
+    setSubcategories((subs) => [
+      ...subs,
+      {
+        id: Math.random().toString(36).slice(2),
+        name: { en: '', ar: '' },
+        en: '',
+        ar: '',
+        logo: '',
+        logoFile: null,
+        logoPreview: null,
+        description: { en: '', ar: '' },
+        description_en: '',
+        description_ar: '',
+        slogan: { en: '', ar: '' },
+        slogan_en: '',
+        slogan_ar: '',
+        benefits: [],
+        colors: [],
+        hardcodedPageSlug: '',
+      },
+    ]);
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
@@ -219,6 +269,7 @@ export default function EditCategoryPage() {
       colors: (s.colors || []).map((c: any) => ({
         image: c.image,
       })),
+      hardcodedPageSlug: s.hardcodedPageSlug || ''
     }));
     formData.set("subcategories", JSON.stringify(subcategoriesToSend));
     formData.set("id", category.id || category._id);
@@ -256,127 +307,156 @@ export default function EditCategoryPage() {
           <textarea id="description_ar" name="description_ar" defaultValue={category.description?.ar} className="w-full border rounded p-2 min-h-[80px]" />
         </div>
         <Label>Subcategories</Label>
+        {subcategories.length === 0 && (
+          <div className="mb-4 text-gray-500">No subcategories yet.</div>
+        )}
         {subcategories.map((sub, idx) => (
-          <div key={sub.id || idx} className="flex flex-col gap-2 border p-2 rounded-md mb-2">
-            <Input
-              type="text"
-              value={sub.name?.en || sub.en || ""}
-              onChange={e => handleSubcategoryChange(idx, "en", e.target.value)}
-              placeholder="Subcategory Name (English)"
-              className="flex-1"
-            />
-            <Input
-              type="text"
-              value={sub.name?.ar || sub.ar || ""}
-              onChange={e => handleSubcategoryChange(idx, "ar", e.target.value)}
-              placeholder="Subcategory Name (Arabic)"
-              className="flex-1"
-            />
-            <textarea
-              value={sub.description?.en || sub.description_en || ""}
-              onChange={e => handleSubcategoryChange(idx, "description_en", e.target.value)}
-              placeholder="Subcategory Description (English)"
-              className="w-full border rounded p-2 min-h-[40px]"
-            />
-            <textarea
-              value={sub.description?.ar || sub.description_ar || ""}
-              onChange={e => handleSubcategoryChange(idx, "description_ar", e.target.value)}
-              placeholder="Subcategory Description (Arabic)"
-              className="w-full border rounded p-2 min-h-[40px]"
-            />
-            <Input
-              type="text"
-              value={sub.slogan?.en || sub.slogan_en || ""}
-              onChange={e => handleSubcategoryChange(idx, "slogan_en", e.target.value)}
-              placeholder="Subcategory Slogan (English)"
-              className="w-full border rounded p-2"
-            />
-            <Input
-              type="text"
-              value={sub.slogan?.ar || sub.slogan_ar || ""}
-              onChange={e => handleSubcategoryChange(idx, "slogan_ar", e.target.value)}
-              placeholder="Subcategory Slogan (Arabic)"
-              className="w-full border rounded p-2"
-            />
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={e => handleLogoChange(idx, e.target.files?.[0] || null)}
-              className="w-40"
-            />
-            {sub.logoPreview ? (
-              <div className="relative w-12 h-12">
-                <Image src={sub.logoPreview} alt="Logo preview" fill className="object-contain rounded" />
-              </div>
-            ) : sub.logo ? (
-              <div className="relative w-12 h-12">
-                <Image src={`/api/images/${sub.logo}`} alt="Logo" fill className="object-contain rounded" />
-              </div>
-            ) : null}
-            {/* Benefits Section */}
-            <div className="mt-2">
-              <Label>Benefits (optional)</Label>
-              {(sub.benefits || []).map((benefit: any, bIdx: number) => (
-                <div key={bIdx} className="flex flex-col gap-2 border p-2 rounded-md mb-2 bg-gray-50">
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={e => handleSubcategoryBenefitImageChange(idx, bIdx, e.target.files?.[0] || null)}
-                    className="w-40"
-                  />
-                  {benefit.imagePreview ? (
-                    <div className="relative w-16 h-16">
-                      <Image src={benefit.imagePreview} alt="Benefit preview" fill className="object-contain rounded" />
-                    </div>
-                  ) : benefit.image ? (
-                    <div className="relative w-16 h-16">
-                      <Image src={`/api/images/${benefit.image}`} alt="Benefit" fill className="object-contain rounded" />
-                    </div>
-                  ) : null}
-                  <textarea
-                    value={benefit.description_en || ""}
-                    onChange={e => handleSubcategoryBenefitChange(idx, bIdx, "description_en", e.target.value)}
-                    placeholder="Benefit Description (English)"
-                    className="w-full border rounded p-2 min-h-[40px]"
-                  />
-                  <textarea
-                    value={benefit.description_ar || ""}
-                    onChange={e => handleSubcategoryBenefitChange(idx, bIdx, "description_ar", e.target.value)}
-                    placeholder="Benefit Description (Arabic)"
-                    className="w-full border rounded p-2 min-h-[40px]"
-                  />
-                  <Button type="button" variant="destructive" size="sm" onClick={() => handleRemoveBenefit(idx, bIdx)}>Remove Benefit</Button>
+          <div key={sub.id || idx} className="flex flex-col gap-3 border border-gray-200 bg-white/80 rounded-lg shadow-sm p-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                type="text"
+                value={sub.name?.en || sub.en || ""}
+                onChange={e => handleSubcategoryChange(idx, "en", e.target.value)}
+                placeholder="Subcategory Name (English)"
+                className="flex-1"
+              />
+              <Input
+                type="text"
+                value={sub.name?.ar || sub.ar || ""}
+                onChange={e => handleSubcategoryChange(idx, "ar", e.target.value)}
+                placeholder="Subcategory Name (Arabic)"
+                className="flex-1"
+              />
+              <Input
+                type="text"
+                value={sub.slogan?.en || sub.slogan_en || ""}
+                onChange={e => handleSubcategoryChange(idx, "slogan_en", e.target.value)}
+                placeholder="Slogan (English)"
+                className="flex-1"
+              />
+              <Input
+                type="text"
+                value={sub.slogan?.ar || sub.slogan_ar || ""}
+                onChange={e => handleSubcategoryChange(idx, "slogan_ar", e.target.value)}
+                placeholder="Slogan (Arabic)"
+                className="flex-1"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <textarea
+                value={sub.description?.en || sub.description_en || ""}
+                onChange={e => handleSubcategoryChange(idx, "description_en", e.target.value)}
+                placeholder="Description (English)"
+                className="w-full border rounded p-2 min-h-[40px]"
+              />
+              <textarea
+                value={sub.description?.ar || sub.description_ar || ""}
+                onChange={e => handleSubcategoryChange(idx, "description_ar", e.target.value)}
+                placeholder="Description (Arabic)"
+                className="w-full border rounded p-2 min-h-[40px]"
+              />
+            </div>
+            <div className="flex flex-col md:flex-row gap-4 items-center mt-2">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={e => handleLogoChange(idx, e.target.files?.[0] || null)}
+                className="w-40"
+              />
+              {sub.logoPreview ? (
+                <div className="relative w-12 h-12">
+                  <Image src={sub.logoPreview} alt="Logo preview" fill className="object-contain rounded" />
                 </div>
-              ))}
-              <Button type="button" variant="outline" size="sm" onClick={() => handleAddBenefit(idx)}>Add Benefit</Button>
+              ) : sub.logo ? (
+                <div className="relative w-12 h-12">
+                  <Image src={`/api/images/${sub.logo}`} alt="Logo" fill className="object-contain rounded" />
+                </div>
+              ) : null}
+              <Input
+                type="text"
+                value={sub.hardcodedPageSlug || ''}
+                onChange={e => handleSubcategoryChange(idx, "hardcodedPageSlug", e.target.value)}
+                placeholder="Hardcoded Page Slug (optional)"
+                className="w-full border rounded p-2"
+              />
+            </div>
+            {/* Benefits Section */}
+            <div className="mt-4">
+              <Label className="font-semibold mb-1 block">Benefits (optional)</Label>
+              <div className="flex flex-row flex-wrap gap-2 items-center">
+                {(sub.benefits || []).map((benefit: any, bIdx: number) => (
+                  <div key={bIdx} className="flex flex-col items-center gap-1 bg-gray-50 border border-gray-200 rounded p-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => handleSubcategoryBenefitImageChange(idx, bIdx, e.target.files?.[0] || null)}
+                      className="w-20"
+                    />
+                    {benefit.imagePreview ? (
+                      <div className="relative w-8 h-8">
+                        <Image src={benefit.imagePreview} alt="Benefit preview" fill className="object-contain rounded" />
+                      </div>
+                    ) : benefit.image ? (
+                      <div className="relative w-8 h-8">
+                        <Image src={`/api/images/${benefit.image}`} alt="Benefit" fill className="object-contain rounded" />
+                      </div>
+                    ) : null}
+                    <Input
+                      type="text"
+                      value={benefit.description_en || ""}
+                      onChange={e => handleSubcategoryBenefitChange(idx, bIdx, "description_en", e.target.value)}
+                      placeholder="EN"
+                      className="w-32 text-xs"
+                    />
+                    <Input
+                      type="text"
+                      value={benefit.description_ar || ""}
+                      onChange={e => handleSubcategoryBenefitChange(idx, bIdx, "description_ar", e.target.value)}
+                      placeholder="AR"
+                      className="w-32 text-xs"
+                    />
+                    <Button type="button" variant="destructive" size="icon" className="w-7 h-7" onClick={() => handleRemoveBenefit(idx, bIdx)}>
+                      ×
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" size="sm" className="w-24" onClick={() => handleAddBenefit(idx)}>Add Benefit</Button>
+              </div>
             </div>
             {/* Colors Section */}
-            <div className="mt-2">
-              <Label>Colors (optional)</Label>
-              {(sub.colors || []).map((color: any, cIdx: number) => (
-                <div key={cIdx} className="flex flex-col gap-2 border p-2 rounded-md mb-2 bg-gray-50">
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={e => handleSubcategoryColorImageChange(idx, cIdx, e.target.files?.[0] || null)}
-                    className="w-40"
-                  />
-                  {color.imagePreview ? (
-                    <div className="relative w-16 h-16">
-                      <Image src={color.imagePreview} alt="Color preview" fill className="object-contain rounded" />
-                    </div>
-                  ) : color.image ? (
-                    <div className="relative w-16 h-16">
-                      <Image src={`/api/images/${color.image}`} alt="Color" fill className="object-contain rounded" />
-                    </div>
-                  ) : null}
-                  <Button type="button" variant="destructive" size="sm" onClick={() => handleRemoveColor(idx, cIdx)}>Remove Color</Button>
-                </div>
-              ))}
-              <Button type="button" variant="outline" size="sm" onClick={() => handleAddColor(idx)}>Add Color</Button>
+            <div className="mt-4">
+              <Label className="font-semibold mb-1 block">Colors (optional)</Label>
+              <div className="flex flex-row flex-wrap gap-2 items-center">
+                {(sub.colors || []).map((color: any, cIdx: number) => (
+                  <div key={cIdx} className="flex flex-col items-center gap-1 bg-gray-50 border border-gray-200 rounded p-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => handleSubcategoryColorImageChange(idx, cIdx, e.target.files?.[0] || null)}
+                      className="w-20"
+                    />
+                    {color.imagePreview ? (
+                      <div className="relative w-8 h-8">
+                        <Image src={color.imagePreview} alt="Color preview" fill className="object-contain rounded" />
+                      </div>
+                    ) : color.image ? (
+                      <div className="relative w-8 h-8">
+                        <Image src={`/api/images/${color.image}`} alt="Color" fill className="object-contain rounded" />
+                      </div>
+                    ) : null}
+                    <Button type="button" variant="destructive" size="icon" className="w-7 h-7" onClick={() => handleRemoveColor(idx, cIdx)}>
+                      ×
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" size="sm" className="w-24" onClick={() => handleAddColor(idx)}>Add Color</Button>
+              </div>
             </div>
           </div>
         ))}
+        <Button type="button" variant="outline" className="mt-2" onClick={handleAddSubcategory}>
+          Add Subcategory
+        </Button>
         <div className="flex gap-4">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Saving..." : "Save Changes"}

@@ -6,6 +6,7 @@ import ProductCard from "@/components/product-card"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import ReadMoreText from "@/components/ReadMoreText"
+import Image from "next/image"
 
 interface SubcategoryPageClientProps {
   category: Category
@@ -55,7 +56,20 @@ export default function SubcategoryPageClient({
       </p>
     </div>
   </div>
-
+  <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mb-8 flex flex-col items-center" >
+    <Image
+      src={`/api/images/${subcategory.logo}`}
+      alt="Logo"
+      width={300}
+      height={80}
+      className="mb-4"
+    />
+    {subcategory.slogan && (
+      <p className="text-xl font-semibold text-center text-primary mb-2">
+        {lang === "ar" ? subcategory.slogan.ar : subcategory.slogan.en}
+      </p>
+    )}
+  </div>
   {subcategory.description && (subcategory.description[lang] || subcategory.description.en) && (
     <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mt-6">
       {/* Mobile: ReadMoreText with 4 lines */}

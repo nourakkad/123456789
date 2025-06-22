@@ -69,6 +69,7 @@ const CategorySchema = z.object({
     colors: z.array(z.object({
       image: z.string().optional(),
     })).optional(),
+    hardcodedPageSlug: z.string().optional()
   })).optional(),
   description: z.object({ en: z.string().min(5), ar: z.string().min(5) }),
 });
@@ -319,11 +320,11 @@ export async function createCategory(formData: FormData) {
       ar: formData.get("description_ar")?.toString() || "",
     };
     const slug = generateSlug(name.en)
-    let subcategories: { id: string; name: { en: string; ar: string }; slug: string; logo?: string; description: { en: string; ar: string }; slogan: { en: string; ar: string } }[] = []
+    let subcategories: { id: string; name: { en: string; ar: string }; slug: string; logo?: string; description: { en: string; ar: string }; slogan: { en: string; ar: string }; hardcodedPageSlug?: string }[] = []
     const subcategoriesRaw = formData.get("subcategories") as string | null
     if (subcategoriesRaw) {
       try {
-        const names: { id?: string; en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string; benefits?: any[]; colors?: any[] }[] = JSON.parse(subcategoriesRaw)
+        const names: { id?: string; en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string; benefits?: any[]; colors?: any[]; hardcodedPageSlug?: string }[] = JSON.parse(subcategoriesRaw)
         if (Array.isArray(names)) {
           subcategories = names
             .filter((n) => n && n.en && n.ar)
@@ -348,6 +349,7 @@ export async function createCategory(formData: FormData) {
               colors: Array.isArray(n.colors) ? n.colors.map(c => ({
                 image: c.image,
               })) : [],
+              hardcodedPageSlug: n.hardcodedPageSlug || undefined
             }))
         }
       } catch (e) {
@@ -389,11 +391,11 @@ export async function updateCategory(formData: FormData) {
       ar: formData.get("description_ar")?.toString() || "",
     };
     const slug = generateSlug(name.en)
-    let subcategories: { id: string; name: { en: string; ar: string }; slug: string; logo?: string; description: { en: string; ar: string }; slogan: { en: string; ar: string } }[] = [];
+    let subcategories: { id: string; name: { en: string; ar: string }; slug: string; logo?: string; description: { en: string; ar: string }; slogan: { en: string; ar: string }; hardcodedPageSlug?: string }[] = [];
     const subcategoriesRaw = formData.get("subcategories") as string | null;
     if (subcategoriesRaw) {
       try {
-        const names: { id?: string; en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string; benefits?: any[]; colors?: any[] }[] = JSON.parse(subcategoriesRaw);
+        const names: { id?: string; en: string; ar: string; logo?: string; description_en?: string; description_ar?: string; slogan_en?: string; slogan_ar?: string; benefits?: any[]; colors?: any[]; hardcodedPageSlug?: string }[] = JSON.parse(subcategoriesRaw);
         if (Array.isArray(names)) {
           subcategories = names
             .filter((n) => n && n.en && n.ar)
@@ -418,6 +420,7 @@ export async function updateCategory(formData: FormData) {
               colors: Array.isArray(n.colors) ? n.colors.map(c => ({
                 image: c.image,
               })) : [],
+              hardcodedPageSlug: n.hardcodedPageSlug || undefined
             }))
         }
       } catch (e) {
@@ -758,4 +761,15 @@ export async function createSubcategory(formData: FormData) {
     console.error("Error creating subcategory:", error)
     throw new Error("Failed to create subcategory")
   }
+}
+
+export async function reorderCategories(ids: string[]) {
+  const { db } = await connectToDatabase();
+  const bulkOps = ids.map((id, idx) => ({
+    updateOne: {
+      filter: { _id: new ObjectId(id) },
+      update: { $set: { order: idx } },
+    },
+  }));
+  await db.collection(collections.categories).bulkWrite(bulkOps);
 }

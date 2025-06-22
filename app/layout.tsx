@@ -46,7 +46,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} style={{ position: 'relative' }}>
+      <body className={`${inter.className} force-light-mode`} style={{ position: 'relative' }}>
         {/* Gradient Light Sphere Background */}
         <div
           aria-hidden="true"
