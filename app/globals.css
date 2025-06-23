@@ -117,3 +117,11 @@
     color-scheme: light !important;
   }
 }
+
+/* Carousel responsive slide sizing */
+.carousel-slide { flex: 0 0 100%; min-width: 0; }
+@media (min-width: 640px) { .carousel-slide { flex: 0 0 50%; } }
+@media (min-width: 1024px) { .carousel-slide { flex: 0 0 33.3333%; } }
+
+/* Make carousel images taller/wider */
+.carousel-slide img { height: 20rem; object-fit: cover; width: 100%; border-radius: 0.5rem; }
