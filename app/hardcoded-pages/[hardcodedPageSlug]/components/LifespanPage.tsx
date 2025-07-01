@@ -193,79 +193,88 @@ export default async function LifespanPage({ searchParams }: Props) {
         </div>
       </div>
 
-      {/* Benefits Section */}
-      {Array.isArray(benefits) && benefits.length > 0 && (() => {
-        const fullRowCount = Math.floor(benefits.length / 5) * 5;
-        const fullRows = benefits.slice(0, fullRowCount);
-        const lastRow = benefits.slice(fullRowCount);
-        return (
-          <div className="my-8">
-            <h2 className={`text-2xl font-bold mb-4 text-primary ${lang === 'ar' ? 'text-right' : 'text-left'}`}>{lang === 'ar' ? 'استمتع بالمزايا' : 'TAKE HOME THE BENEFITS'}</h2>
-            {/* Mobile & Tablet (Default Grid) */}
-            <div className="grid grid-cols-3 sm:grid-cols-2 lg:hidden gap-6 justify-items-center">
-              {benefits.map((benefit, idx) => (
-                <div key={idx} className="flex flex-col items-center text-center">
-                  {benefit.image && (
-                    <img
-                      src={`/api/images/${benefit.image}`}
-                      alt="Benefit"
-                      className="w-24 h-24 object-contain mb-2"
-                    />
-                  )}
-                  <p className={`text-black whitespace-pre-line ${lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-                    {lang === 'ar' ? benefit.description_ar : benefit.description_en}
-                  </p>
-                </div>
-              ))}
-            </div>
-            {/* Desktop (Custom Centered Last Row) */}
-            <div className="hidden lg:block">
-              {fullRows.length > 0 && (
-                <div className="grid grid-cols-5 gap-6 justify-items-center">
-                  {fullRows.map((benefit, idx) => (
-                    <div key={idx} className="flex flex-col items-center text-center">
-                      {benefit.image && (
-                        <img
-                          src={`/api/images/${benefit.image}`}
-                          alt="Benefit"
-                          className="w-24 h-24 object-contain mb-2"
-                        />
-                      )}
-                      <p className={`text-black whitespace-pre-line ${lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-                        {lang === 'ar' ? benefit.description_ar : benefit.description_en}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {lastRow.length > 0 && (
-                <div
-                  className="grid gap-1 justify-center mt-6"
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${lastRow.length}, minmax(0, 1fr))`,
-                  }}
-                >
-                  {lastRow.map((benefit, idx) => (
-                    <div key={idx + fullRowCount} className="flex flex-col items-center text-center">
-                      {benefit.image && (
-                        <img
-                          src={`/api/images/${benefit.image}`}
-                          alt="Benefit"
-                          className="w-24 h-24 object-contain mb-2"
-                        />
-                      )}
-                      <p className={`text-black whitespace-pre-line ${lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-                        {lang === 'ar' ? benefit.description_ar : benefit.description_en}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+       {/* Benefits Section */}
+{Array.isArray(subcategory.benefits) && subcategory.benefits.length > 0 && (() => {
+  const fullRowCount = Math.floor(subcategory.benefits.length / 5) * 5;
+  const fullRows = subcategory.benefits.slice(0, fullRowCount);
+  const lastRow = subcategory.benefits.slice(fullRowCount);
+
+  return (
+    <div className="my-8">
+        <h2 className={`text-2xl font-bold mb-4 text-primary ${lang === 'ar' ? 'text-right' : ''}`}>
+  {lang === 'ar' ? 'استمتع بالمزايا' : 'TAKE HOME THE BENEFITS'}
+</h2>
+
+
+      {/* 🔹 Mobile & Tablet (Default Grid) */}
+      <div className="grid grid-cols-3 sm:grid-cols-2 lg:hidden gap-6 justify-items-center">
+        {subcategory.benefits.map((benefit, idx) => (
+          <div key={idx} className="flex flex-col items-center text-center">
+            {benefit.image && (
+              <img
+                src={`/api/images/${benefit.image}`}
+                alt="Benefit"
+                className="w-24 h-24 object-contain mb-2"
+              />
+            )}
+            <p className="text-black whitespace-pre-line">
+              {lang === 'ar' ? benefit.description_ar : benefit.description_en}
+            </p>
           </div>
-        );
-      })()}
+        ))}
+      </div>
+
+      {/* 🔹 Desktop (Custom Centered Last Row) */}
+      <div className="hidden lg:block">
+        {/* Full 5-column rows */}
+        {fullRows.length > 0 && (
+          <div className="grid grid-cols-5 gap-6 justify-items-center">
+            {fullRows.map((benefit, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center">
+                {benefit.image && (
+                  <img
+                    src={`/api/images/${benefit.image}`}
+                    alt="Benefit"
+                    className="w-24 h-24 object-contain mb-2"
+                  />
+                )}
+                <p className="text-black whitespace-pre-line">
+                  {lang === 'ar' ? benefit.description_ar : benefit.description_en}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Centered last row */}
+        {lastRow.length > 0 && (
+          <div
+            className="grid gap-1 justify-center mt-6"
+            style={{
+              display: 'grid ',
+              gridTemplateColumns: `repeat(${lastRow.length}, minmax(0, 1fr))`,
+            }}
+          >
+            {lastRow.map((benefit, idx) => (
+              <div key={idx + fullRowCount} className="flex flex-col items-center text-center">
+                {benefit.image && (
+                  <img
+                    src={`/api/images/${benefit.image}`}
+                    alt="Benefit"
+                    className="w-24 h-24 object-contain mb-2"
+                  />
+                )}
+                <p className="text-black whitespace-pre-line">
+                  {lang === 'ar' ? benefit.description_ar : benefit.description_en}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+})()}
 
       {/* Profile Size Options */}
       <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mb-8">

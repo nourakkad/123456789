@@ -108,18 +108,49 @@ export default async function TierclassicPage({ searchParams }: Props) {
       )}
 
       
-      {/* Benefits Section (dynamic) */}
-      {Array.isArray(benefits) && benefits.length > 0 && (
-        <div className={`my-8 ${lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-          <h2 className={`text-2xl font-bold mb-4 text-primary text-center`}>{lang === 'ar' ? 'استمتع بالمزايا' : 'Take Home The Benefits'}</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 mb-4">
-            {benefits.map((benefit, idx) => (
+      {/* Benefits Section */}
+{Array.isArray(subcategory.benefits) && subcategory.benefits.length > 0 && (() => {
+  const fullRowCount = Math.floor(subcategory.benefits.length / 5) * 5;
+  const fullRows = subcategory.benefits.slice(0, fullRowCount);
+  const lastRow = subcategory.benefits.slice(fullRowCount);
+
+  return (
+    <div className="my-8">
+        <h2 className={`text-2xl font-bold mb-4 text-primary ${lang === 'ar' ? 'text-right' : ''}`}>
+  {lang === 'ar' ? 'استمتع بالمزايا' : 'TAKE HOME THE BENEFITS'}
+</h2>
+
+
+      {/* 🔹 Mobile & Tablet (Default Grid) */}
+      <div className="grid grid-cols-3 sm:grid-cols-2 lg:hidden gap-6 justify-items-center">
+        {subcategory.benefits.map((benefit, idx) => (
+          <div key={idx} className="flex flex-col items-center text-center">
+            {benefit.image && (
+              <img
+                src={`/api/images/${benefit.image}`}
+                alt="Benefit"
+                className="w-24 h-24 object-contain mb-2"
+              />
+            )}
+            <p className="text-black whitespace-pre-line">
+              {lang === 'ar' ? benefit.description_ar : benefit.description_en}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* 🔹 Desktop (Custom Centered Last Row) */}
+      <div className="hidden lg:block">
+        {/* Full 5-column rows */}
+        {fullRows.length > 0 && (
+          <div className="grid grid-cols-5 gap-6 justify-items-center">
+            {fullRows.map((benefit, idx) => (
               <div key={idx} className="flex flex-col items-center text-center">
                 {benefit.image && (
                   <img
                     src={`/api/images/${benefit.image}`}
-                    alt={lang === 'ar' ? 'ميزة' : 'Benefit'}
-                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain mb-2"
+                    alt="Benefit"
+                    className="w-24 h-24 object-contain mb-2"
                   />
                 )}
                 <p className="text-black whitespace-pre-line">
@@ -128,8 +159,37 @@ export default async function TierclassicPage({ searchParams }: Props) {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Centered last row */}
+        {lastRow.length > 0 && (
+          <div
+            className="grid gap-1 justify-center mt-6"
+            style={{
+              display: 'grid ',
+              gridTemplateColumns: `repeat(${lastRow.length}, minmax(0, 1fr))`,
+            }}
+          >
+            {lastRow.map((benefit, idx) => (
+              <div key={idx + fullRowCount} className="flex flex-col items-center text-center">
+                {benefit.image && (
+                  <img
+                    src={`/api/images/${benefit.image}`}
+                    alt="Benefit"
+                    className="w-24 h-24 object-contain mb-2"
+                  />
+                )}
+                <p className="text-black whitespace-pre-line">
+                  {lang === 'ar' ? benefit.description_ar : benefit.description_en}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+})()}
      
 
       {/* DIVERSE APPLICATIONS Section */}

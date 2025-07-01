@@ -67,7 +67,7 @@ export default async function RapidrailPage({ searchParams }: Props) {
     const lastRow = benefits.slice(fullRowCount);
     benefitsSection = (
       <div className="my-8">
-        <h2 className={`text-2xl font-bold mb-4 text-primary ${lang === 'ar' ? 'text-right' : ''}`}>{lang === 'ar' ? 'الفوائد' : 'Benefits'}</h2>
+        <h2 className={`text-2xl font-bold mb-4 text-primary ${lang === 'ar' ? 'text-right' : ''}`}>{lang === 'ar' ? 'استمتع بالمزايا' : 'TAKE HOME THE BENEFITS'}</h2>
         {/* Mobile & Tablet (Default Grid) */}
         <div className="grid grid-cols-3 sm:grid-cols-2 lg:hidden gap-6 justify-items-center">
           {benefits.map((benefit, idx) => (
