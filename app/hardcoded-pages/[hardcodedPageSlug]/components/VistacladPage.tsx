@@ -38,15 +38,15 @@ const translations = {
   systemComponents: { en: 'VISTACLAD SYSTEM COMPONENTS', ar: 'مكونات نظام فيستاكلاد' },
   systemComponentsDesc: {
     en: 'The VistaClad system combines Eva-Last composite technologies with an innovative installation process to provide a robust and convenient cladding solution. The resultant hidden fixing generates an unblemished finish and avoids the limitations or inconvenience of fastening through composite.',
-    ar: 'يجمع نظام فيستاكلاد بين تقنيات إيفا-لاست المركبة وعملية تركيب مبتكرة لتوفير حل إكساء قوي ومريح. ينتج عن التثبيت المخفي تشطيبًا خاليًا من العيوب ويتجنب القيود أو الإزعاج الناتج عن التثبيت من خلال المواد المركبة.'
+    ar: 'يجمع نظام فيستاكلاد بين تقنيات إيفا-لاست المركبة وعملية تركيب مبتكرة لتوفير حل تكسية متين وسهل الاستخدام. يضمن التثبيت المخفي الناتج لمسة نهائية خالية من العيوب، ويجنبك قيود أو صعوبة التثبيت باستخدام المواد المركبة.'
   },
   compositeCladdingBoards: { en: 'COMPOSITE CLADDING BOARDS', ar: 'ألواح الإكساء المركبة' },
   clipStrip: { en: 'CLIP STRIP', ar: 'شريط التثبيت' },
   adaptersTrim: { en: 'ADAPTERS & TRIM PROFILES', ar: 'الملحقات وبروفيلات التشطيب' },
-  infinityBambooTitle: { en: 'INFINITY BAMBOO COMPOSITE CLADDING', ar: 'إكساء إنفينيتي من الخيزران المركب' },
+  infinityBambooTitle: { en: 'INFINITY BAMBOO COMPOSITE CLADDING', ar: 'ألواح إكساء الواجهات من إنفينيتي' },
   infinityBambooDesc: {
     en: 'VistaClad cladding boards are available in Infinity bamboo composite material technologies, designed for long-lasting weather resistance, including protection against insects, moisture, and fading. The tongue and groove profile design interlocks the boards, supplying system tolerance whilst improving load distribution and reduction of moisture ingress.',
-    ar: 'ألواح فيستاكلاد متوفرة بتقنية إنفينيتي من الخيزران المركب، مصممة لمقاومة الطقس طويلة الأمد، بما في ذلك الحماية من الحشرات والرطوبة والبهتان. يعمل تصميم اللسان والأخدود على تداخل الألواح، مما يوفر تحمل النظام مع تحسين توزيع الحمل وتقليل تسرب الرطوبة.'
+    ar: 'تتوفر ألواح تكسية فيستاكلاد بتقنية إنفينيتي المصنوعة من الخيزران، وهي مصممة لمقاومة العوامل الجوية لفترة طويلة، بما في ذلك الحماية من الحشرات والرطوبة والبهتان. يتشابك تصميم اللسان والأخدود بين الألواح، مما يوفر مرونة أكبر للنظام، ويحسن توزيع الأحمال ويقلل من دخول الرطوبة.'
   },
   crossSection: { en: 'Cross section', ar: 'المقطع العرضي' },
   productDescription: { en: 'Product description', ar: 'وصف المنتج' },
@@ -62,12 +62,35 @@ const translations = {
   warranty: { en: 'Reliable durability with a 25-year warranty', ar: 'متانة موثوقة مع ضمان لمدة 25 سنوات' },
   colourRangeDesc: {
     en: 'The Infinity colour range offers specialised streaked colour technology to ensure that no two cladding boards are identical and to give your exterior walls the look of natural timber cladding. The brushed finish applied to the VistaClad Infinity cladding boards further enhances the natural tones, allowing you to enjoy the look of timber cladding in a more durable, hassle-free, and sustainable bamboo composite.',
-    ar: 'توفر مجموعة ألوان إنفينيتي تقنية ألوان مخططة متخصصة لضمان عدم تطابق أي لوحين من ألواح الإكساء ومنح جدرانك الخارجية مظهر الخشب الطبيعي. يعزز التشطيب المصقول المطبق على ألواح فيستاكلاد إنفينيتي النغمات الطبيعية، مما يتيح لك الاستمتاع بمظهر الإكساء الخشبي في منتج أكثر متانة وسهولة في الصيانة واستدامة.'
+    ar: 'تقدم مجموعة ألوان إنفينيتي تقنية ألوان مخططة متخصصة لضمان عدم تطابق أي لوحين من ألواح الكسوة، ولمنح جدرانك الخارجية مظهرًا يشبه الكسوة الخشبية الطبيعية. يُعزز الطلاء المصقول المُستخدم في ألواح كسوة فيستاكلاد إنفينيتي درجات الألوان الطبيعية، مما يتيح لك الاستمتاع بمظهر الكسوة الخشبية في مركب خيزران أكثر متانة وسهولة واستدامة.'
   },
-  cuttingEdgeTitle: { en: 'CUTTING-EDGE, SUSTAINABLE CLADDING', ar: 'إكساء متطور ومستدام' },
+  cuttingEdgeTitle: { en: 'CUTTING-EDGE, SUSTAINABLE CLADDING', ar: 'كسوة متطورة ومستدامة' },
   cuttingEdgeDesc: {
     en: 'VistaClad bamboo composite cladding breathes vibrancy into your home or office space and enhances your walls with the attractive look of natural hardwoods. Let routine maintenance and premature replacement be things of the past as you look to the future with one of the most cutting-edge cladding systems available, complete with complementary trim for a neat and tidy finish.',
-    ar: 'يمنح إكساء فيستاكلاد من الخيزران المركب الحيوية لمساحتك المنزلية أو المكتبية ويعزز جدرانك بمظهر الخشب الطبيعي الجذاب. اجعل الصيانة الدورية والاستبدال المبكر من الماضي مع أحد أكثر أنظمة الإكساء تطورًا، والمزود بملحقات تشطيب متكاملة لمظهر أنيق ومرتب.'
+    ar: 'تضفي كسوة فيستاكلاد المصنوعة من الخيزران المركب حيويةً على منزلك أو مكتبك، وتُضفي على جدرانك مظهرًا جذابًا للأخشاب الصلبة الطبيعية. دع الصيانة الدورية والاستبدال المبكر شيئًا من الماضي، وتطلع إلى المستقبل مع أحد أحدث أنظمة الكسوة المتاحة، مع لمسات نهائية أنيقة ومرتبة.'
+  },
+  clipStripSectionTitle: { en: 'Clip Strip Section', ar: 'مقطع شريط التثبيت' },
+  clipStripSectionDesc: {
+    en: 'The clip strip is used in VistaClad cladding design to allow the cladding boards to be easily and securely clicked into place. Three epoxy-coated, zinc-galvanised strip profile options provide flexibility in application and allow for optimal ventilation and drainage.',
+    ar: 'يستخدم شريط التثبيت فيستا كلاد تصميم زنبركي مثقوب يسمح بتثبيت ألواح الإكساء بسهولة وأمان في مكانها. توفر خيارات الشرائط المجلفنة والمطلية بالإيبوكسي مرونة في التطبيق وتهوية وتصريفًا مثاليين.'
+  },
+  flatClipTitle: { en: 'Flat Clip Strip', ar: 'شريط التثبيت المسطح' },
+  flatClipDesc: {
+    en: 'The clip strip is used in VistaClad cladding design to allow the cladding boards to be easily and securely clicked into place. Three epoxy-coated, zinc-galvanised strip profile options provide flexibility in application and allow for optimal ventilation and drainage.',
+    ar: 'يستخدم شريط تثبيت فيستاكلاد تصميمًا مميزاً مثقوبًا يسمح بتثبيت ألواح الكسوة بسهولة وأمان. ثلاثة خيارات لأشرطة الشرائط المطلية بالإيبوكسي والمجلفنة بالزنك توفر مرونة في الاستخدام وتوفر تهوية وتصريفًا مثاليين.'
+  },
+  topHatClipTitle: { en: 'Top Hat Clip Strip', ar: 'شريط تثبيت النهاية العلوية' },
+  topHatClipDesc: {
+    en: 'The top hat clip strip fits over 38 mm (timber) and 40 mm (composite and steel) supports or directly to the wall substrate. As a result, the ventilation/drainage cavity will be influenced by the thickness of the support as well as the fixing method but the minimum depth the top hat profile allows for is 25.4 mm. Fixing can be done through the face, the side, and either side of the clip strip base. Fixing through the side allows for the top hat to be plumbed quickly and easily.',
+    ar: 'يتناسب شريط تثبيت القبعة العلوية مع دعامات بقطر 38 مم (خشبية) و40 مم (مركبة وفولاذية) أو مباشرةً على ركيزة الجدار. نتيجةً لذلك، يتأثر تجويف التهوية/التصريف بسماكة الدعامة وطريقة التثبيت، ولكن الحد الأدنى للعمق الذي يسمح به تصميم النهاية العلوية هو 25.4 مم. يمكن التثبيت من خلال الواجهة والجانب وأيٍّ من جانبي قاعدة شريط المشبك. يسمح التثبيت من الجانب بتركيب النهاية العلوية بسرعة وسهولة.'
+  },
+  weight: { en: 'Weight', ar: 'الوزن' },
+  nylonAdaptors: { en: 'NYLON ADAPTORS', ar: 'وصلات النايلون' },
+  aluminiumTrimProfiles: { en: 'ALUMINIUM TRIM PROFILES', ar: 'بروفيلات التشطيب الألمنيوم' },
+  trimApplications: { en: 'TRIM APPLICATIONS', ar: 'تطبيقات التشطيبات' },
+  trimApplicationsDesc: {
+    en: 'Trim accessories hide the structure for a neat final look and can be installed using sealing strips to improve the weather resistance of the cladding surface. The clip strip allows for easy guided placement of the adaptors and the universal trims may be used with VistaClad or any cladding boards with a thickness of 20.5 mm to 26.5 mm.',
+    ar: 'تُخفي ملحقات التشطيبات الهيكل الخارجي لإضفاء مظهر نهائي أنيق، ويمكن تركيبها باستخدام شرائط مانعة للتسرب لتحسين مقاومة سطح الكسوة للعوامل الجوية. يُسهّل شريط التثبيت وضع المحولات، ويمكن استخدام التشطيبات الشاملة مع ألواح VistaClad أو أي ألواح تشطيب أخرى بسمك يتراوح بين 20.5 و26.5 ملم.'
   },
 };
 
@@ -98,10 +121,10 @@ export default async function VistacladPage({ searchParams }: Props) {
 
   // TODO: Replace with dynamic data if needed
   const featureImages = [
-    { src: "/Vistaclad Cladding _ A Smart Cladding Solution - Eva-Last SA_files/1.-VistaClad-garage-cladding.jpg", alt: "Garage Cladding" },
-    { src: "/Vistaclad Cladding _ A Smart Cladding Solution - Eva-Last SA_files/Resident-Lucy-Vistaclad-interior.jpg", alt: "Interior" },
-    { src: "/Vistaclad Cladding _ A Smart Cladding Solution - Eva-Last SA_files/3.-VistaClad-enerance-way.jpg", alt: "Entrance Way" },
-    { src: "/Vistaclad Cladding _ A Smart Cladding Solution - Eva-Last SA_files/Resident-Lucy-Vistaclad.jpg", alt: "Vistaclad" },
+    { src: "/uploads/1.-VistaClad-garage-cladding.jpg", alt: "Garage Cladding" },
+    { src: "/uploads/Resident-Lucy-Vistaclad-interior.jpg", alt: "Interior" },
+    { src: "/uploads/3.-VistaClad-enerance-way.jpg", alt: "Entrance Way" },
+    { src: "/uploads/Resident-Lucy-Vistaclad.jpg", alt: "Vistaclad" },
   ];
 
   return (
@@ -242,9 +265,19 @@ export default async function VistacladPage({ searchParams }: Props) {
         </div>
         {/* Text right */}
         <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">{translations.cuttingEdgeTitle[lang]}</h2>
+          <h2
+            className="text-3xl md:text-4xl font-extrabold mb-4"
+            dir={lang === 'ar' ? 'rtl' : 'ltr'}
+            style={lang === 'ar' ? { textAlign: 'right' } : {}}
+          >
+            {translations.cuttingEdgeTitle[lang]}
+          </h2>
           <div className=" w-24 h-1 bg-green-900 mb-6 mx-auto md:mx-0" />
-          <p className=" bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mt-6 text-lg text-black-800 max-w-xl">
+          <p
+            className=" bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mt-6 text-lg text-black-800 max-w-xl"
+            dir={lang === 'ar' ? 'rtl' : 'ltr'}
+            style={lang === 'ar' ? { textAlign: 'right' } : {}}
+          >
             {translations.cuttingEdgeDesc[lang]}
           </p>
         </div>
@@ -257,13 +290,13 @@ export default async function VistacladPage({ searchParams }: Props) {
 
   return (
     <div className="my-8">
-        <h2 className={`text-2xl font-bold mb-4 text-primary ${lang === 'ar' ? 'text-right' : ''}`}>
+        <h2 className={`text-2xl md:text-3xl font-bold mb-4 text-primary ${lang === 'ar' ? 'text-right' : ''}`}>
   {translations.takeHomeBenefits[lang]}
 </h2>
 
 
       {/* 🔹 Mobile & Tablet (Default Grid) */}
-      <div className="grid grid-cols-3 sm:grid-cols-2 lg:hidden gap-6 justify-items-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:hidden gap-6 justify-items-center">
         {subcategory.benefits.map((benefit, idx) => (
           <div key={idx} className=" flex flex-col items-center text-center">
             {benefit.image && (
@@ -333,7 +366,7 @@ export default async function VistacladPage({ searchParams }: Props) {
 })()}
 
       {/* VISTACLAD SYSTEM COMPONENTS section */}
-      <section className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mt-6">
+      <section className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-4 md:p-6 mt-6">
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4">{translations.systemComponents[lang]}</h2>
         <p className="text-lg text-center text-gray-800 mb-10 max-w-3xl mx-auto">
           {translations.systemComponentsDesc[lang]}
@@ -341,7 +374,7 @@ export default async function VistacladPage({ searchParams }: Props) {
         <div className="flex flex-col md:flex-row justify-center items-center gap-8">
           {/* Composite Cladding Boards */}
           <div className="flex flex-col items-center">
-            <div className="w-56 h-56 rounded-full border-8 border-gray-200 overflow-hidden flex items-center justify-center mb-4">
+            <div className="w-32 h-32 md:w-56 md:h-56 rounded-full border-8 border-gray-200 overflow-hidden flex items-center justify-center mb-4">
               <Image
                 src="/uploads/Group-5071.png"
                 alt="Composite Cladding Boards"
@@ -354,7 +387,7 @@ export default async function VistacladPage({ searchParams }: Props) {
           </div>
           {/* Clip Strip */}
           <div className="flex flex-col items-center">
-            <div className="w-56 h-56 rounded-full border-8 border-gray-200 overflow-hidden flex items-center justify-center mb-4">
+            <div className="w-32 h-32 md:w-56 md:h-56 rounded-full border-8 border-gray-200 overflow-hidden flex items-center justify-center mb-4">
               <Image
                 src="/uploads/Group-5072.webp"
                 alt="Clip Strip"
@@ -367,7 +400,7 @@ export default async function VistacladPage({ searchParams }: Props) {
           </div>
           {/* Adapters & Trim Profiles */}
           <div className="flex flex-col items-center">
-            <div className="w-56 h-56 rounded-full border-8 border-gray-200 overflow-hidden flex items-center justify-center mb-4">
+            <div className="w-32 h-32 md:w-56 md:h-56 rounded-full border-8 border-gray-200 overflow-hidden flex items-center justify-center mb-4">
               <Image
                 src="/uploads/Group-5073.png"
                 alt="Adapters & Trim Profiles"
@@ -384,7 +417,7 @@ export default async function VistacladPage({ searchParams }: Props) {
         {/* INFINITY BAMBOO COMPOSITE CLADDING section */}
         <section className="max-w-5xl mx-auto my-16 px-4">
           {/* Logos */}
-          <div className="flex flex-row justify-center items-center gap-8 mb-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mb-4">
             <Image
               src="/uploads/Infinity-logo-black.webp"
               alt="Infinity logo"
@@ -435,15 +468,22 @@ export default async function VistacladPage({ searchParams }: Props) {
       {/* Colors Section */}
       {Array.isArray(colors) && colors.length > 0 && (
         <div className="my-8">
-          
           <div className="w-full flex flex-col md:flex-row items-center justify-between mb-8">
-            <h2 className="text-3xl font-extrabold text-primary text-center md:text-left w-full md:w-auto">
+            <h2
+              className={`text-3xl font-extrabold text-primary text-center md:text-left w-full md:w-auto${lang === 'ar' ? ' text-right' : ''}`}
+              dir={lang === 'ar' ? 'rtl' : 'ltr'}
+              style={lang === 'ar' ? { textAlign: 'right' } : {}}
+            >
               {translations.colourRange[lang]}
             </h2>
             <div className="flex flex-col items-center gap-4 w-full md:w-auto">
         
   <div className="flex items-center gap-4">
-    <span className="text-lg font-semibold text-black">
+    <span
+      className="text-lg font-semibold text-black"
+      dir={lang === 'ar' ? 'rtl' : 'ltr'}
+      style={lang === 'ar' ? { textAlign: 'right' } : {}}
+    >
       {translations.technology[lang]}
     </span>
     <Image
@@ -455,27 +495,209 @@ export default async function VistacladPage({ searchParams }: Props) {
     />
   </div>
 
-  <p className="text-center text-black text-sm md:text-base leading-snug">
+  <p
+    className="text-center text-black text-sm md:text-base leading-snug "
+    dir={lang === 'ar' ? 'rtl' : 'ltr'}
+    style={lang === 'ar' ? { textAlign: 'right' } : {}}
+  >
     {translations.warranty[lang]}
   </p>
 </div>
           </div>
-          <p className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mt-6">{translations.colourRangeDesc[lang]}</p>
-            
-          <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-4  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center">
-            {colors.map((color, idx) => (
-              color.image && (
-                <img
-                  key={idx}
-                  src={`/api/images/${color.image}`}
-                  alt="Color"
-                  className="w-full max-w-lg h-auto object-contain mx-auto"
-                />
-              )
-            ))}
+          <p
+            className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mt-6 my-2"
+            dir={lang === 'ar' ? 'rtl' : 'ltr'}
+            style={lang === 'ar' ? { textAlign: 'right' } : {}}
+          >
+            {translations.colourRangeDesc[lang]}
+          </p>
+          <div className="overflow-x-auto">
+            <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-4  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center">
+              {colors.map((color, idx) => (
+                color.image && (
+                  <img
+                    key={idx}
+                    src={`/api/images/${color.image}`}
+                    alt="Color"
+                    className="w-full max-w-lg h-auto object-contain mx-auto"
+                  />
+                )
+              ))}
+            </div>
           </div>
         </div>
       )}
+
+      {/* Clip Strip Section */}
+      <section className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-4 md:p-6 mt-6 my-12">
+        <h2
+          className="text-3xl font-extrabold mb-4 text-primary text-center"
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+          style={lang === 'ar' ? { textAlign: 'center' } : {}}
+        >
+          {translations.clipStripSectionTitle?.[lang] || (lang === 'ar' ? 'شريط التثبيت' : 'THE CLIP STRIP')}
+        </h2>
+        <p
+          className="text-center text-gray-700 max-w-2xl mx-auto mb-8"
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+          style={lang === 'ar' ? { textAlign: 'right' } : {}}
+        >
+          {translations.clipStripSectionDesc?.[lang] || (lang === 'ar'
+            ? 'يستخدم شريط تثبيت فيستاكلاد تصميمًا مميزاً مثقوبًا يسمح بتثبيت ألواح الكسوة بسهولة وأمان. ثلاثة خيارات لأشرطة الشرائط المطلية بالإيبوكسي والمجلفنة بالزنك توفر مرونة في الاستخدام وتوفر تهوية وتصريفًا مثاليين.'
+            : 'The VistaClad clip strip uses a punched spring design that allows the cladding boards to be easily and securely clicked into place. Three epoxy-coated, zinc-galvanised strip profile options provide flexibility in application and allow for optimal ventilation and drainage.')}
+        </p>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 mb-12">
+          <div className="flex-shrink-0 flex justify-center items-center w-full md:w-1/3">
+            <div className="rounded-full border-4 border-gray-200 w-64 h-64 flex items-center justify-center bg-white overflow-hidden">
+              <img src="/uploads/Screenshot-2024-10-04-at-10.56.03.png" alt="Flat Clip Strip" className="object-contain w-full h-full" />
+            </div>
+          </div>
+          <div className="flex-1">
+            <h3
+              className="text-2xl font-bold mb-2"
+              dir={lang === 'ar' ? 'rtl' : 'ltr'}
+              style={lang === 'ar' ? { textAlign: 'right' } : {}}
+            >
+              {translations.flatClipTitle?.[lang] || (lang === 'ar' ? 'شريط التثبيت المسطح' : 'FLAT CLIP STRIP')}
+            </h3>
+            <p
+              className="mb-2 text-gray-800"
+              dir={lang === 'ar' ? 'rtl' : 'ltr'}
+              style={lang === 'ar' ? { textAlign: 'right' } : {}}
+            >
+              {translations.flatClipDesc?.[lang] || (lang === 'ar'
+                ? 'يستخدم شريط التثبيت فيستا كلاد تصميم زنبركي مثقوب يسمح بتثبيت ألواح الإكساء بسهولة وأمان في مكانها. توفر خيارات الشرائط المجلفنة والمطلية بالإيبوكسي مرونة في التطبيق وتهوية وتصريفًا مثاليين.'
+                : 'The VistaClad clip strip uses a punched spring design that allows the cladding boards to be easily and securely clicked into place. Three epoxy-coated, zinc-galvanised strip profile options provide flexibility in application and allow for optimal ventilation and drainage.')}
+            </p>
+            <div className="flex flex-row gap-8 mt-4">
+              <div>
+                <div
+                  className="font-semibold"
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                  style={lang === 'ar' ? { textAlign: 'right' } : {}}
+                >
+                  {translations.dimensions?.[lang] || (lang === 'ar' ? 'الأبعاد' : 'Dimensions')}
+                </div>
+                <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={lang === 'ar' ? { textAlign: 'right' } : {}}>
+                  40 x 12 mm (1.8 m {lang === 'ar' ? 'أطوال' : 'lengths'})
+                </div>
+              </div>
+              <div>
+                <div
+                  className="font-semibold"
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                  style={lang === 'ar' ? { textAlign: 'right' } : {}}
+                >
+                  {translations.weight?.[lang] || (lang === 'ar' ? 'الوزن' : 'Weight')}
+                </div>
+                <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={lang === 'ar' ? { textAlign: 'right' } : {}}>
+                  0.4 kg/m
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12">
+          <div className="flex-shrink-0 flex justify-center items-center w-full md:w-1/3">
+            <div className="rounded-full border-4 border-gray-200 w-64 h-64 flex items-center justify-center bg-white overflow-hidden">
+              <img src="/uploads/Screenshot-2024-10-04-at-10.56.18.png" alt="Top Hat Clip Strip" className="object-contain w-full h-full" />
+            </div>
+          </div>
+          <div className="flex-1">
+            <h3
+              className="text-2xl font-bold mb-2"
+              dir={lang === 'ar' ? 'rtl' : 'ltr'}
+              style={lang === 'ar' ? { textAlign: 'right' } : {}}
+            >
+              {translations.topHatClipTitle?.[lang] || (lang === 'ar' ? 'شريط التثبيت توب هات' : 'TOP HAT CLIP STRIP')}
+            </h3>
+            <p
+              className="mb-2 text-gray-800"
+              dir={lang === 'ar' ? 'rtl' : 'ltr'}
+              style={lang === 'ar' ? { textAlign: 'right' } : {}}
+            >
+              {translations.topHatClipDesc?.[lang] || (lang === 'ar'
+                ? 'شريط التثبيت توب هات يناسب الدعامات الخشبية والمعدنية، ويوفر تهوية وتصريفًا مثاليين. يمكن التثبيت من خلال الوجه أو الجوانب، مما يسمح بضبط سريع وسهل.'
+                : 'The top hat clip strip fits over 38 mm (timber) and 40 mm (composite and steel) supports or directly to the wall substrate. As a result, the ventilation/drainage cavity will be influenced by the thickness of the support as well as the fixing method but the minimum depth the top hat profile allows for is 25.4 mm. Fixing can be done through the face, the side, and either side of the clip strip base. Fixing through the side allows for the top hat to be plumbed quickly and easily.')}
+            </p>
+            <div className="flex flex-row gap-8 mt-4">
+              <div>
+                <div
+                  className="font-semibold"
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                  style={lang === 'ar' ? { textAlign: 'right' } : {}}
+                >
+                  {translations.dimensions?.[lang] || (lang === 'ar' ? 'الأبعاد' : 'Dimensions')}
+                </div>
+                <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={lang === 'ar' ? { textAlign: 'right' } : {}}>
+                  85.4 x 35.9 mm (2.7 m {lang === 'ar' ? 'أطوال' : 'lengths'})
+                </div>
+              </div>
+              <div>
+                <div
+                  className="font-semibold"
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                  style={lang === 'ar' ? { textAlign: 'right' } : {}}
+                >
+                  {translations.weight?.[lang] || (lang === 'ar' ? 'الوزن' : 'Weight')}
+                </div>
+                <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={lang === 'ar' ? { textAlign: 'right' } : {}}>
+                  1.2 kg/m
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Adaptors & Trim Profiles Section */}
+      <section className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-4 md:p-6 mt-6">
+        {/* NYLON ADAPTORS */}
+        <h2
+          className={`text-2xl font-extrabold mb-4 text-primary ${lang === 'ar' ? 'text-right' : 'text-left'}`}
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+        >
+          {translations.nylonAdaptors[lang]}
+        </h2>
+        <div className="grid  gap-6 mb-6 items-end">
+          <div className="flex flex-col w-full">
+            <img src="/uploads/Screenshot-2024-10-04-at-11.04.33-1024x307.png" alt="Top & bottom adaptor" className="w-full h-auto object-fill  mb-2" />
+          </div>
+        </div>
+
+        {/* ALUMINIUM TRIM PROFILES */}
+        <h2
+          className={`text-2xl font-extrabold mb-4 text-primary ${lang === 'ar' ? 'text-right' : 'text-left'}`}
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+        >
+          {translations.aluminiumTrimProfiles[lang]}
+        </h2>
+        <div className="grid  gap-6 mb-6 items-end">
+          <div className="flex flex-col w-full">
+            <img src="/uploads/Screenshot-2024-10-04-at-11.webp" alt="Universal trim profile" className="w-full h-auto object-fill  mb-2" />
+          </div>
+        </div>
+
+        {/* TRIM APPLICATIONS */}
+        <h2
+          className={`text-2xl font-extrabold mb-4 text-primary ${lang === 'ar' ? 'text-right' : 'text-left'}`}
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+        >
+          {translations.trimApplications[lang]}
+        </h2>
+        <p
+          className="mb-6 text-gray-800"
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+          style={lang === 'ar' ? { textAlign: 'right' } : {}}
+        >
+          {translations.trimApplicationsDesc[lang]}
+        </p>
+        <div className="grid  gap-6 items-end">
+          <div className="flex flex-col w-full">
+            <img src="/uploads/Screenshot-2024-10-04-at-11.06.40-1024x387.jpg" alt="Trim App 1" className="w-full h-auto object-fill  mb-2" />
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
