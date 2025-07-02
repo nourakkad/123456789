@@ -14,6 +14,14 @@ interface ProductPageClientProps {
 export default function ProductPageClient({ product }: ProductPageClientProps) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang") === "ar" ? "ar" : "en";
+  const from = searchParams.get('from');
+  const categorySlug = product.categorySlug;
+  const subcategorySlug = product.subcategorySlug;
+
+  let backHref = `/products/${categorySlug}/${subcategorySlug || ''}?lang=${lang}`;
+  if (from === 'hardcoded-infinity') {
+    backHref = `/hardcoded-pages/infinity?categorySlug=${categorySlug}&lang=${lang}`;
+  }
 
   if (!product) {
     notFound()
@@ -23,7 +31,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center mb-8">
       <Link
-          href={`/products/${product.categorySlug}/${product.subcategorySlug || ''}?lang=${lang}`}
+          href={backHref}
           className="hidden md:inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary bg-white/50 backdrop-blur-sm text-primary font-medium shadow-sm hover:bg-primary/10 hover:shadow-md transition-all duration-150 mr-4 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <ArrowLeft className="w-5 h-5" />

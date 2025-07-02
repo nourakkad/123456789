@@ -6,6 +6,7 @@ interface ProductCardProps {
   product: Product
   lang: "en" | "ar"
   small?: boolean
+  fromHardcodedPage?: boolean
 }
 
 // Helper function to get text from translation object or string
@@ -14,9 +15,11 @@ function getText(text: string | { en: string; ar: string }): string {
   return text.en // Default to English
 }
 
-export default function ProductCard({ product, lang, small }: ProductCardProps) {
-  // Use a consistent URL structure for all products
-  const productUrl = `/products/${product.categorySlug}/${product.subcategorySlug || 'products'}/${product.slug}?lang=${lang}`
+export default function ProductCard({ product, lang, small, fromHardcodedPage }: ProductCardProps) {
+  // Use fromHardcodedPage to force the 'from' param when rendering from the hardcoded page
+  const isHardcodedInfinity = fromHardcodedPage || product.subcategorySlug === 'infinity' || product.categorySlug === 'infinity';
+  const fromParam = isHardcodedInfinity ? `&from=hardcoded-infinity&categorySlug=${product.categorySlug}` : '';
+  const productUrl = `/products/${product.categorySlug}/${product.subcategorySlug || 'products'}/${product.slug}?lang=${lang}${fromParam}`;
 
   console.log('ProductCard URL:', productUrl)
 
