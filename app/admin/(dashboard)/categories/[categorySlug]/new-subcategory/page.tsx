@@ -20,26 +20,40 @@ export default function NewSubcategoryPage({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  function uploadWithProgress(formData: FormData, onProgress: (percent: number) => void) {
+    return new Promise<any>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/images/upload");
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          onProgress(Math.round((event.loaded / event.total) * 100));
+        }
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+      xhr.onerror = () => reject(new Error("Upload failed"));
+      xhr.send(formData);
+    });
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
-
+    setUploadProgress(0);
     try {
       // First upload the logo if there is one
       let logoUrl = ""
       if (logoFile) {
         const formData = new FormData()
         formData.append("file", logoFile)
-        const response = await fetch("/api/images/upload", {
-          method: "POST",
-          body: formData,
-        })
-        if (!response.ok) {
-          const error = await response.json()
-          throw new Error(error.error || "Failed to upload logo")
-        }
-        const data = await response.json()
+        const data = await uploadWithProgress(formData, setUploadProgress);
         logoUrl = data.id
       }
       // Then create the subcategory
@@ -68,6 +82,7 @@ export default function NewSubcategoryPage({
       })
     } finally {
       setIsSubmitting(false)
+      setUploadProgress(0);
     }
   }
 
@@ -103,6 +118,9 @@ export default function NewSubcategoryPage({
     }
   }
 
+  // Add a helper to check if upload is in progress
+  const isUploading = uploadProgress > 0 && uploadProgress < 100;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -134,6 +152,11 @@ export default function NewSubcategoryPage({
                 onChange={handleLogoChange}
                 className="cursor-pointer"
               />
+              {uploadProgress > 0 && uploadProgress < 100 && (
+                <div className="w-40 bg-gray-200 rounded h-2 mt-2">
+                  <div className="bg-blue-500 h-2 rounded" style={{ width: `${uploadProgress}%` }} />
+                </div>
+              )}
               {logoPreview && (
                 <div className="mt-2 relative w-32 h-32">
                   <Image
@@ -146,7 +169,7 @@ export default function NewSubcategoryPage({
               )}
             </div>
             <div className="flex gap-4">
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting || isUploading}>
                 {isSubmitting ? "Creating..." : "Create Subcategory"}
               </Button>
               <Button type="button" variant="outline" onClick={() => router.push("/admin/categories")}>

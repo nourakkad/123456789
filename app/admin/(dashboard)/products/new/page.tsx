@@ -29,6 +29,8 @@ export default function NewProductPage() {
     description_en: string
     description_ar: string
   }[]>([])
+  const [mainImageProgress, setMainImageProgress] = useState(0);
+  const [extraImagesProgress, setExtraImagesProgress] = useState<number[]>([]);
 
   useEffect(() => {
     // Fetch categories from the backend API route
@@ -44,10 +46,32 @@ export default function NewProductPage() {
     setSelectedSubcategory("")
   }, [selectedCategory, categories])
 
+  function uploadWithProgress(formData: FormData, onProgress: (percent: number) => void) {
+    return new Promise<any>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/images/upload");
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          onProgress(Math.round((event.loaded / event.total) * 100));
+        }
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+      xhr.onerror = () => reject(new Error("Upload failed"));
+      xhr.send(formData);
+    });
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
-
+    setMainImageProgress(0);
+    setExtraImagesProgress([]);
     const formData = new FormData(event.currentTarget)
     // Add selected category and subcategory slugs
     formData.set("category", selectedCategory)
@@ -59,18 +83,24 @@ export default function NewProductPage() {
 
     // Handle extra images upload (to DB)
     let extraImagesToSend = [...extraImages]
+    let newExtraImagesProgress = [...extraImagesProgress];
     for (let i = 0; i < extraImagesToSend.length; i++) {
       const img = extraImagesToSend[i]
       if (img.file) {
         const uploadForm = new FormData()
         uploadForm.append("file", img.file)
-        const uploadRes = await fetch("/api/images/upload", {
-          method: "POST",
-          body: uploadForm,
-        })
-        const uploadData = await uploadRes.json()
-        if (uploadData.id) {
-          extraImagesToSend[i].url = uploadData.id // store image ID
+        newExtraImagesProgress[i] = 0;
+        setExtraImagesProgress([...newExtraImagesProgress]);
+        try {
+          const uploadData = await uploadWithProgress(uploadForm, (percent) => {
+            newExtraImagesProgress[i] = percent;
+            setExtraImagesProgress([...newExtraImagesProgress]);
+          });
+          if (uploadData.id) {
+            extraImagesToSend[i].url = uploadData.id // store image ID
+          }
+        } catch (e) {
+          // handle error if needed
         }
       }
     }
@@ -89,11 +119,8 @@ export default function NewProductPage() {
       if (imageFile && imageFile.size > 0) {
         const uploadForm = new FormData()
         uploadForm.append("file", imageFile)
-        const uploadRes = await fetch("/api/images/upload", {
-          method: "POST",
-          body: uploadForm,
-        })
-        const uploadData = await uploadRes.json()
+        setMainImageProgress(0);
+        const uploadData = await uploadWithProgress(uploadForm, setMainImageProgress);
         if (uploadData.id) {
           imageId = uploadData.id // store image ID
         }
@@ -117,6 +144,8 @@ export default function NewProductPage() {
       })
     } finally {
       setIsSubmitting(false)
+      setMainImageProgress(0);
+      setExtraImagesProgress([]);
     }
   }
 
@@ -140,6 +169,9 @@ export default function NewProductPage() {
   function handleExtraImageDescChange(idx: number, lang: "en" | "ar", value: string) {
     setExtraImages(imgs => imgs.map((img, i) => i === idx ? { ...img, [lang === "en" ? "description_en" : "description_ar"]: value } : img))
   }
+
+  // Add a helper to check if any upload is in progress
+  const isUploading = mainImageProgress > 0 && mainImageProgress < 100 || extraImagesProgress.some(p => p > 0 && p < 100);
 
   return (
     <div className="space-y-6">
@@ -236,6 +268,11 @@ export default function NewProductPage() {
               <Label htmlFor="image">Product Image</Label>
               <Input id="image" name="image" type="file" accept="image/*" />
               <p className="text-sm text-muted-foreground">Upload a product image (optional)</p>
+              {mainImageProgress > 0 && mainImageProgress < 100 && (
+                <div className="w-full bg-gray-200 rounded h-2 mt-2">
+                  <div className="bg-blue-500 h-2 rounded" style={{ width: `${mainImageProgress}%` }} />
+                </div>
+              )}
             </div>
             {/* Extra Images Section */}
             <div className="space-y-2">
@@ -257,6 +294,11 @@ export default function NewProductPage() {
                       Remove
                     </Button>
                   </div>
+                  {extraImagesProgress[idx] > 0 && extraImagesProgress[idx] < 100 && (
+                    <div className="w-full bg-gray-200 rounded h-2 mb-2">
+                      <div className="bg-blue-500 h-2 rounded" style={{ width: `${extraImagesProgress[idx]}%` }} />
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <Textarea
                       value={img.description_en}
@@ -278,7 +320,7 @@ export default function NewProductPage() {
               </Button>
             </div>
             <div className="flex gap-4">
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting || isUploading}>
                 {isSubmitting ? "Creating..." : "Create Product"}
               </Button>
               <Button type="button" variant="outline" onClick={() => router.push("/admin/products")}>

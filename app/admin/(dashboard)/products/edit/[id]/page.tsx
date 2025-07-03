@@ -16,6 +16,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [product, setProduct] = useState<any>(null)
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     // Fetch product data from API
@@ -24,9 +25,31 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
       .then(data => setProduct(data))
   }, [params.id])
 
+  function uploadWithProgress(formData: FormData, onProgress: (percent: number) => void) {
+    return new Promise<any>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/images/upload");
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          onProgress(Math.round((event.loaded / event.total) * 100));
+        }
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+      xhr.onerror = () => reject(new Error("Upload failed"));
+      xhr.send(formData);
+    });
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
+    setUploadProgress(0);
     const formData = new FormData(event.currentTarget)
     formData.append("id", params.id)
     // Append multilingual fields
@@ -38,6 +61,21 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     formData.set("category_ar", formData.get("category_ar") || "")
     formData.set("subcategory_en", formData.get("subcategory_en") || "")
     formData.set("subcategory_ar", formData.get("subcategory_ar") || "")
+    // Handle image upload if a new file is selected
+    const imageFile = formData.get("image") as File;
+    let imageId = "";
+    if (imageFile && imageFile.size > 0) {
+      const uploadForm = new FormData();
+      uploadForm.append("file", imageFile);
+      const uploadData = await uploadWithProgress(uploadForm, setUploadProgress);
+      if (uploadData.id) {
+        imageId = uploadData.id;
+      }
+      formData.delete("image");
+      if (imageId) {
+        formData.append("image", imageId);
+      }
+    }
     try {
       await updateProduct(formData)
       toast({ title: "Product updated", description: "The product has been updated successfully." })
@@ -46,8 +84,12 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
       toast({ title: "Something went wrong", description: "The product couldn't be updated. Please try again.", variant: "destructive" })
     } finally {
       setIsSubmitting(false)
+      setUploadProgress(0);
     }
   }
+
+  // Add a helper to check if upload is in progress
+  const isUploading = uploadProgress > 0 && uploadProgress < 100;
 
   if (!product) return <div>Loading...</div>
 
@@ -107,9 +149,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               <Label htmlFor="image">Product Image</Label>
               <Input id="image" name="image" type="file" accept="image/*" />
               <p className="text-sm text-muted-foreground">Upload a product image (optional)</p>
+              {uploadProgress > 0 && uploadProgress < 100 && (
+                <div className="w-full bg-gray-200 rounded h-2 mt-2">
+                  <div className="bg-blue-500 h-2 rounded" style={{ width: `${uploadProgress}%` }} />
+                </div>
+              )}
             </div>
             <div className="flex gap-4">
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting || isUploading}>
                 {isSubmitting ? "Updating..." : "Update Product"}
               </Button>
               <Button type="button" variant="outline" onClick={() => router.push("/admin/products")}>Cancel</Button>

@@ -30,13 +30,36 @@ export default function NewCategoryPage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [subcategories, setSubcategories] = useState<Subcategory[]>([])
+  const [logoProgress, setLogoProgress] = useState<number[]>([])
+
+  function uploadWithProgress(formData: FormData, onProgress: (percent: number) => void) {
+    return new Promise<any>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/images/upload");
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          onProgress(Math.round((event.loaded / event.total) * 100));
+        }
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+      xhr.onerror = () => reject(new Error("Upload failed"));
+      xhr.send(formData);
+    });
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
-
+    setLogoProgress([])
     const formData = new FormData(event.currentTarget)
     let subcats = [...subcategories]
+    let newLogoProgress = [...logoProgress]
 
     // Upload all logos first
     for (let i = 0; i < subcats.length; i++) {
@@ -44,20 +67,22 @@ export default function NewCategoryPage() {
       if (sub.logoFile) {
         const logoForm = new FormData()
         logoForm.append("file", sub.logoFile)
-        const response = await fetch("/api/images/upload", {
-          method: "POST",
-          body: logoForm,
-        })
-        if (response.ok) {
-          const data = await response.json()
+        newLogoProgress[i] = 0
+        setLogoProgress([...newLogoProgress])
+        try {
+          const data = await uploadWithProgress(logoForm, (percent) => {
+            newLogoProgress[i] = percent
+            setLogoProgress([...newLogoProgress])
+          })
           subcats[i].logoUrl = data.id
-        } else {
+        } catch (e) {
           toast({
             title: "Logo upload failed",
             description: `Could not upload logo for subcategory #${i + 1}`,
             variant: "destructive",
           })
           setIsSubmitting(false)
+          setLogoProgress([])
           return
         }
       }
@@ -93,6 +118,7 @@ export default function NewCategoryPage() {
       })
     } finally {
       setIsSubmitting(false)
+      setLogoProgress([])
     }
   }
 
@@ -134,6 +160,9 @@ export default function NewCategoryPage() {
     }
     reader.readAsDataURL(file)
   }
+
+  // Add a helper to check if any upload is in progress
+  const isUploading = logoProgress.some(p => p > 0 && p < 100)
 
   return (
     <div className="space-y-6">
@@ -219,8 +248,12 @@ export default function NewCategoryPage() {
                     type="file"
                     accept="image/*"
                     onChange={e => handleLogoChange(idx, e.target.files?.[0] || null)}
-                    className="w-40"
                   />
+                  {logoProgress[idx] > 0 && logoProgress[idx] < 100 && (
+                    <div className="w-40 bg-gray-200 rounded h-2 mt-2">
+                      <div className="bg-blue-500 h-2 rounded" style={{ width: `${logoProgress[idx]}%` }} />
+                    </div>
+                  )}
                   {sub.logoPreview && (
                     <div className="relative w-12 h-12">
                       <Image src={sub.logoPreview} alt="Logo preview" fill className="object-contain rounded" />
@@ -236,7 +269,7 @@ export default function NewCategoryPage() {
               </Button>
             </div>
             <div className="flex gap-4">
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting || isUploading}>
                 {isSubmitting ? "Creating..." : "Create Category"}
               </Button>
               <Button type="button" variant="outline" onClick={() => router.push("/admin/categories")}>Cancel</Button>

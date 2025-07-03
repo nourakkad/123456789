@@ -18,6 +18,7 @@ export default function NewGalleryImagePage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [categories, setCategories] = useState<string[]>([])
   const [categoryInput, setCategoryInput] = useState("")
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     // Fetch all gallery images and extract unique categories
@@ -28,14 +29,34 @@ export default function NewGalleryImagePage() {
       })
   }, [])
 
+  function uploadWithProgress(formData: FormData, onProgress: (percent: number) => void) {
+    return new Promise<any>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/images/upload");
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          onProgress(Math.round((event.loaded / event.total) * 100));
+        }
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+      xhr.onerror = () => reject(new Error("Upload failed"));
+      xhr.send(formData);
+    });
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
-
+    setUploadProgress(0);
     const formData = new FormData(event.currentTarget)
     // Use the selected or entered category
     formData.set("category", categoryInput)
-
     try {
       // Upload the image file first
       const imageFile = formData.get("image") as File
@@ -44,11 +65,7 @@ export default function NewGalleryImagePage() {
       if (imageFile && imageFile.size > 0) {
         const uploadForm = new FormData()
         uploadForm.append("file", imageFile)
-        const uploadRes = await fetch("/api/images/upload", {
-          method: "POST",
-          body: uploadForm,
-        })
-        const uploadData = await uploadRes.json()
+        const uploadData = await uploadWithProgress(uploadForm, setUploadProgress);
         if (uploadData.id) {
           imageId = uploadData.id
         }
@@ -78,8 +95,12 @@ export default function NewGalleryImagePage() {
       })
     } finally {
       setIsSubmitting(false)
+      setUploadProgress(0);
     }
   }
+
+  // Add a helper to check if upload is in progress
+  const isUploading = uploadProgress > 0 && uploadProgress < 100;
 
   return (
     <div className="space-y-6">
@@ -143,9 +164,14 @@ export default function NewGalleryImagePage() {
               <Label htmlFor="image">Image File</Label>
               <Input id="image" name="image" type="file" accept="image/*" required />
               <p className="text-sm text-muted-foreground">Upload an image file (JPG, PNG, etc.)</p>
+              {uploadProgress > 0 && uploadProgress < 100 && (
+                <div className="w-full bg-gray-200 rounded h-2 mt-2">
+                  <div className="bg-blue-500 h-2 rounded" style={{ width: `${uploadProgress}%` }} />
+                </div>
+              )}
             </div>
             <div className="flex gap-4">
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting || isUploading}>
                 {isSubmitting ? "Adding..." : "Add Image"}
               </Button>
               <Button type="button" variant="outline" onClick={() => router.push("/admin/gallery")}>

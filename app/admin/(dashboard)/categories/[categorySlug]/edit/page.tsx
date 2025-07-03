@@ -15,6 +15,9 @@ export default function EditCategoryPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [category, setCategory] = useState<any>(null);
   const [subcategories, setSubcategories] = useState<any[]>([]);
+  const [logoProgress, setLogoProgress] = useState<number[]>([]);
+  const [benefitProgress, setBenefitProgress] = useState<number[][]>([]);
+  const [colorProgress, setColorProgress] = useState<number[][]>([]);
 
   useEffect(() => {
     async function fetchCategory() {
@@ -194,59 +197,92 @@ export default function EditCategoryPage() {
     ]);
   }
 
+  function uploadWithProgress(formData: FormData, onProgress: (percent: number) => void) {
+    return new Promise<any>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/images/upload");
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          onProgress(Math.round((event.loaded / event.total) * 100));
+        }
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+      xhr.onerror = () => reject(new Error("Upload failed"));
+      xhr.send(formData);
+    });
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
+    setLogoProgress([]);
+    setBenefitProgress([]);
+    setColorProgress([]);
     const formData = new FormData(e.currentTarget);
     // Upload new logos if any
     let updatedSubs = [...subcategories];
+    let newLogoProgress = [...logoProgress];
+    let newBenefitProgress = [...benefitProgress];
+    let newColorProgress = [...colorProgress];
     for (let i = 0; i < updatedSubs.length; i++) {
       const sub = updatedSubs[i];
+      // Logo
       if (sub.logoFile) {
         const logoForm = new FormData();
         logoForm.append("file", sub.logoFile);
-        const response = await fetch("/api/images/upload", {
-          method: "POST",
-          body: logoForm,
-        });
-        if (response.ok) {
-          const data = await response.json();
+        newLogoProgress[i] = 0;
+        setLogoProgress([...newLogoProgress]);
+        try {
+          const data = await uploadWithProgress(logoForm, (percent) => {
+            newLogoProgress[i] = percent;
+            setLogoProgress([...newLogoProgress]);
+          });
           updatedSubs[i].logo = data.id;
-        }
+        } catch (e) {}
       }
-      // Upload benefit images
+      // Benefits
       if (Array.isArray(sub.benefits)) {
+        newBenefitProgress[i] = newBenefitProgress[i] || [];
         for (let j = 0; j < sub.benefits.length; j++) {
           const benefit = sub.benefits[j];
           if (benefit.imageFile) {
             const benefitForm = new FormData();
             benefitForm.append("file", benefit.imageFile);
-            const response = await fetch("/api/images/upload", {
-              method: "POST",
-              body: benefitForm,
-            });
-            if (response.ok) {
-              const data = await response.json();
+            newBenefitProgress[i][j] = 0;
+            setBenefitProgress([...newBenefitProgress]);
+            try {
+              const data = await uploadWithProgress(benefitForm, (percent) => {
+                newBenefitProgress[i][j] = percent;
+                setBenefitProgress([...newBenefitProgress]);
+              });
               updatedSubs[i].benefits[j].image = data.id;
-            }
+            } catch (e) {}
           }
         }
       }
-      // Upload color images
+      // Colors
       if (Array.isArray(sub.colors)) {
+        newColorProgress[i] = newColorProgress[i] || [];
         for (let j = 0; j < sub.colors.length; j++) {
           const color = sub.colors[j];
           if (color.imageFile) {
             const colorForm = new FormData();
             colorForm.append("file", color.imageFile);
-            const response = await fetch("/api/images/upload", {
-              method: "POST",
-              body: colorForm,
-            });
-            if (response.ok) {
-              const data = await response.json();
+            newColorProgress[i][j] = 0;
+            setColorProgress([...newColorProgress]);
+            try {
+              const data = await uploadWithProgress(colorForm, (percent) => {
+                newColorProgress[i][j] = percent;
+                setColorProgress([...newColorProgress]);
+              });
               updatedSubs[i].colors[j].image = data.id;
-            }
+            } catch (e) {}
           }
         }
       }
@@ -281,8 +317,14 @@ export default function EditCategoryPage() {
       router.push("/admin/categories");
     } finally {
       setIsSubmitting(false);
+      setLogoProgress([]);
+      setBenefitProgress([]);
+      setColorProgress([]);
     }
   }
+
+  // Add a helper to check if any upload is in progress
+  const isUploading = logoProgress.some(p => p > 0 && p < 100) || benefitProgress.some(arr => arr && arr.some(p => p > 0 && p < 100)) || colorProgress.some(arr => arr && arr.some(p => p > 0 && p < 100));
 
   if (isLoading || !category) return <div>Loading...</div>;
 
@@ -363,6 +405,11 @@ export default function EditCategoryPage() {
                 onChange={e => handleLogoChange(idx, e.target.files?.[0] || null)}
                 className="w-40"
               />
+              {logoProgress[idx] > 0 && logoProgress[idx] < 100 && (
+                <div className="w-40 bg-gray-200 rounded h-2 mt-2">
+                  <div className="bg-blue-500 h-2 rounded" style={{ width: `${logoProgress[idx]}%` }} />
+                </div>
+              )}
               {sub.logoPreview ? (
                 <div className="relative w-12 h-12">
                   <Image src={sub.logoPreview} alt="Logo preview" fill className="object-contain rounded" />
@@ -392,6 +439,11 @@ export default function EditCategoryPage() {
                       onChange={e => handleSubcategoryBenefitImageChange(idx, bIdx, e.target.files?.[0] || null)}
                       className="w-20"
                     />
+                    {benefitProgress[idx] && benefitProgress[idx][bIdx] > 0 && benefitProgress[idx][bIdx] < 100 && (
+                      <div className="w-20 bg-gray-200 rounded h-2 mt-2">
+                        <div className="bg-blue-500 h-2 rounded" style={{ width: `${benefitProgress[idx][bIdx]}%` }} />
+                      </div>
+                    )}
                     {benefit.imagePreview ? (
                       <div className="relative w-8 h-8">
                         <Image src={benefit.imagePreview} alt="Benefit preview" fill className="object-contain rounded" />
@@ -435,6 +487,11 @@ export default function EditCategoryPage() {
                       onChange={e => handleSubcategoryColorImageChange(idx, cIdx, e.target.files?.[0] || null)}
                       className="w-20"
                     />
+                    {colorProgress[idx] && colorProgress[idx][cIdx] > 0 && colorProgress[idx][cIdx] < 100 && (
+                      <div className="w-20 bg-gray-200 rounded h-2 mt-2">
+                        <div className="bg-blue-500 h-2 rounded" style={{ width: `${colorProgress[idx][cIdx]}%` }} />
+                      </div>
+                    )}
                     {color.imagePreview ? (
                       <div className="relative w-8 h-8">
                         <Image src={color.imagePreview} alt="Color preview" fill className="object-contain rounded" />
@@ -458,7 +515,7 @@ export default function EditCategoryPage() {
           Add Subcategory
         </Button>
         <div className="flex gap-4">
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting || isUploading}>
             {isSubmitting ? "Saving..." : "Save Changes"}
           </Button>
           <Button type="button" variant="outline" onClick={() => router.push("/admin/categories")}>Cancel</Button>
