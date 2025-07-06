@@ -18,6 +18,9 @@ export default function EditCategoryPage() {
   const [logoProgress, setLogoProgress] = useState<number[]>([]);
   const [benefitProgress, setBenefitProgress] = useState<number[][]>([]);
   const [colorProgress, setColorProgress] = useState<number[][]>([]);
+  const [mainLogoFile, setMainLogoFile] = useState<File | null>(null);
+  const [mainLogoPreview, setMainLogoPreview] = useState<string | null>(null);
+  const [mainLogoProgress, setMainLogoProgress] = useState(0);
 
   useEffect(() => {
     async function fetchCategory() {
@@ -218,13 +221,33 @@ export default function EditCategoryPage() {
     });
   }
 
+  function handleMainLogoChange(file: File | null) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setMainLogoFile(file);
+      setMainLogoPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
+    setMainLogoProgress(0);
     setLogoProgress([]);
     setBenefitProgress([]);
     setColorProgress([]);
     const formData = new FormData(e.currentTarget);
+    // Upload main category logo if any
+    let mainLogoId = category.logo;
+    if (mainLogoFile) {
+      const logoForm = new FormData();
+      logoForm.append("file", mainLogoFile);
+      const data = await uploadWithProgress(logoForm, setMainLogoProgress);
+      mainLogoId = data.id;
+    }
+    formData.set("logo", mainLogoId);
     // Upload new logos if any
     let updatedSubs = [...subcategories];
     let newLogoProgress = [...logoProgress];
@@ -324,7 +347,7 @@ export default function EditCategoryPage() {
   }
 
   // Add a helper to check if any upload is in progress
-  const isUploading = logoProgress.some(p => p > 0 && p < 100) || benefitProgress.some(arr => arr && arr.some(p => p > 0 && p < 100)) || colorProgress.some(arr => arr && arr.some(p => p > 0 && p < 100));
+  const isUploading = mainLogoProgress > 0 && mainLogoProgress < 100 || logoProgress.some(p => p > 0 && p < 100) || benefitProgress.some(arr => arr && arr.some(p => p > 0 && p < 100)) || colorProgress.some(arr => arr && arr.some(p => p > 0 && p < 100));
 
   if (isLoading || !category) return <div>Loading...</div>;
 
@@ -332,6 +355,24 @@ export default function EditCategoryPage() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold mb-4">Edit Category</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="main_logo">Category Logo</Label>
+          <Input id="main_logo" name="main_logo" type="file" accept="image/*" onChange={e => handleMainLogoChange(e.target.files?.[0] || null)} />
+          {mainLogoProgress > 0 && mainLogoProgress < 100 && (
+            <div className="w-40 bg-gray-200 rounded h-2 mt-2">
+              <div className="bg-blue-500 h-2 rounded" style={{ width: `${mainLogoProgress}%` }} />
+            </div>
+          )}
+          {mainLogoPreview ? (
+            <div className="relative w-16 h-16">
+              <Image src={mainLogoPreview} alt="Main logo preview" fill className="object-contain rounded" />
+            </div>
+          ) : category.logo ? (
+            <div className="relative w-16 h-16">
+              <Image src={`/api/images/${category.logo}`} alt="Main logo" fill className="object-contain rounded" />
+            </div>
+          ) : null}
+        </div>
         <div className="space-y-2">
           <Label htmlFor="name_en">Category Name (English)</Label>
           <Input id="name_en" name="name_en" defaultValue={category.name?.en} required />
