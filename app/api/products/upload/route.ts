@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { connectToDatabase } from "@/lib/mongodb";
 
 export const runtime = "nodejs";
 
@@ -12,12 +11,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
     // @ts-ignore
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const filename = `${Date.now()}-${file.name}`.replace(/[^a-zA-Z0-9.\-_]/g, "_");
-    const uploadPath = path.join(process.cwd(), "public", "uploads", filename);
-    await writeFile(uploadPath, buffer);
-    const url = `/uploads/${filename}`;
-    return NextResponse.json({ url });
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const mimeType = file.type;
+    const { db } = await connectToDatabase();
+    const imageResult = await db.collection("images").insertOne({
+      filename: file.name,
+      mimetype: mimeType,
+      image: buffer,
+      createdAt: new Date(),
+      isThumbnail: false,
+    });
+    const imageId = imageResult.insertedId;
+    const imageUrl = `/api/images/${imageId}`;
+    return NextResponse.json({ url: imageUrl, id: imageId, success: true });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json({ error: "Failed to upload image" }, { status: 500 });
