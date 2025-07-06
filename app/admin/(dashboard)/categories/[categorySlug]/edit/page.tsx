@@ -359,8 +359,23 @@ export default function EditCategoryPage() {
           <Label htmlFor="main_logo">Category Logo</Label>
           <Input id="main_logo" name="main_logo" type="file" accept="image/*" onChange={e => handleMainLogoChange(e.target.files?.[0] || null)} />
           {mainLogoProgress > 0 && mainLogoProgress < 100 && (
-            <div className="w-40 bg-gray-200 rounded h-2 mt-2">
-              <div className="bg-blue-500 h-2 rounded" style={{ width: `${mainLogoProgress}%` }} />
+            <div className="flex items-center gap-2 mt-2">
+              <svg className="animate-spin h-5 w-5 text-blue-500" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+              </svg>
+              <div className="w-full bg-gray-200 rounded h-2">
+                <div className="bg-blue-500 h-2 rounded" style={{ width: `${mainLogoProgress}%` }} />
+              </div>
+              <span className="text-sm text-blue-600">Uploading...</span>
+            </div>
+          )}
+          {mainLogoProgress === 100 && (
+            <div className="flex items-center gap-2 mt-2 text-green-600 text-sm">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Image uploaded!
             </div>
           )}
           {mainLogoPreview ? (
@@ -446,9 +461,24 @@ export default function EditCategoryPage() {
                 onChange={e => handleLogoChange(idx, e.target.files?.[0] || null)}
                 className="w-40"
               />
-              {logoProgress[idx] > 0 && logoProgress[idx] < 100 && (
-                <div className="w-40 bg-gray-200 rounded h-2 mt-2">
-                  <div className="bg-blue-500 h-2 rounded" style={{ width: `${logoProgress[idx]}%` }} />
+              {logoProgress[idx] && logoProgress[idx][idx] > 0 && logoProgress[idx][idx] < 100 && (
+                <div className="flex items-center gap-2 mt-2">
+                  <svg className="animate-spin h-5 w-5 text-blue-500" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                  </svg>
+                  <div className="w-full bg-gray-200 rounded h-2">
+                    <div className="bg-blue-500 h-2 rounded" style={{ width: `${logoProgress[idx][idx]}%` }} />
+                  </div>
+                  <span className="text-sm text-blue-600">Uploading...</span>
+                </div>
+              )}
+              {logoProgress[idx] && logoProgress[idx][idx] === 100 && (
+                <div className="flex items-center gap-2 mt-2 text-green-600 text-sm">
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Image uploaded!
                 </div>
               )}
               {sub.logoPreview ? (
