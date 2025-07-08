@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
     await transporter.sendMail({
       from: `Website Contact <${process.env.SMTP_USER}>`,
-      to: "info@timbex.com",
+      to: "info@timbex-sy.com",
       subject: number,
       text: `Name: ${name}\nPhone: ${number}\nMessage: ${message}`,
       html: `<p><b>Name:</b> ${name}</p><p><b>Phone:</b> ${number}</p><p><b>Message:</b><br/>${message.replace(/\n/g, '<br/>')}</p>`
