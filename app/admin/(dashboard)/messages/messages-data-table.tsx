@@ -10,7 +10,7 @@ import Link from "next/link"
 interface Message {
   id: string
   name: string
-  email: string
+  number: string // phone number
   message: string
   createdAt: string
   read: boolean
@@ -35,7 +35,7 @@ export default function MessagesDataTable({ messages }: MessagesDataTableProps) 
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
@@ -46,7 +46,7 @@ export default function MessagesDataTable({ messages }: MessagesDataTableProps) 
           {messages.map((message, idx) => (
             <tr key={message.id} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50" + " hover:bg-blue-50 transition"}>
               <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">{message.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">{message.email}</td>
+              <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">{message.number}</td>
               <td
                 className="px-6 py-4 whitespace-nowrap border-b border-gray-200 max-w-xs truncate"
                 title={message.message}

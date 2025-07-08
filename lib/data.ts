@@ -44,7 +44,7 @@ export interface Message {
   _id?: string | ObjectId
   id?: string
   name: string
-  email: string
+  number: string // phone number
   message: string
   createdAt: string
   read: boolean

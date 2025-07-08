@@ -44,15 +44,15 @@ export default function Footer({ siteName, address, contactEmail, contactPhone, 
             </div>
             <div className="flex flex-col items-center min-w-fit space-y-2">
               <h3 className="text-lg font-semibold mb-2">Follow Us</h3>
-              <Link href="#" className="flex items-center gap-2 hover:text-primary focus:text-primary text-white transition-colors">  
+              <Link href="https://www.facebook.com/share/14M57BDFBeA/?mibextid=wwXIfr" className="flex items-center gap-2 hover:text-primary focus:text-primary text-white transition-colors" target="_blank" rel="noopener noreferrer">  
                 <Facebook className="h-5 w-5" />
                 <span>Facebook</span>
               </Link>
-              <Link href="#" className="flex items-center gap-2 hover:text-primary focus:text-primary text-white transition-colors">  
+              <Link href="https://www.instagram.com/timbex_sy" className="flex items-center gap-2 hover:text-primary focus:text-primary text-white transition-colors" target="_blank" rel="noopener noreferrer">  
                 <Instagram className="h-5 w-5" />
                 <span>Instagram</span>
               </Link>
-              <Link href="#" className="flex items-center gap-2 hover:text-primary focus:text-primary text-white transition-colors">  
+              <Link href="https://wa.me/963968484801" className="flex items-center gap-2 hover:text-primary focus:text-primary text-white transition-colors" target="_blank" rel="noopener noreferrer">  
                 <FaWhatsapp className="h-5 w-5" />
                 <span>WhatsApp</span>
               </Link>
@@ -114,15 +114,15 @@ export default function Footer({ siteName, address, contactEmail, contactPhone, 
           <div className="col-span-2 flex flex-col items-center w-full pt-8 border-t border-white/50" style={{ backgroundColor: "black" }}>
             <h3 className="text-3xl font-extrabold mb-4 text-white">Follow Us</h3>
             <div className="flex flex-row items-center justify-center gap-16 w-full">
-              <Link href="#" className="hover:text-primary focus:text-primary text-white transition-colors flex flex-col items-center text-xl font-bold">
+              <Link href="https://wa.me/963968484801" className="hover:text-primary focus:text-primary text-white transition-colors flex flex-col items-center text-xl font-bold" target="_blank" rel="noopener noreferrer">
                 <FaWhatsapp className="h-8 w-8 mb-2" />
                 <span>WhatsApp</span>
               </Link>
-              <Link href="#" className="hover:text-primary focus:text-primary text-white transition-colors flex flex-col items-center text-xl font-bold">
+              <Link href="https://www.facebook.com/share/14M57BDFBeA/?mibextid=wwXIfr" className="hover:text-primary focus:text-primary text-white transition-colors flex flex-col items-center text-xl font-bold" target="_blank" rel="noopener noreferrer">
                 <Facebook className="h-8 w-8 mb-2" />
                 <span>Facebook</span>
               </Link>
-              <Link href="#" className="hover:text-primary focus:text-primary text-white transition-colors flex flex-col items-center text-xl font-bold">
+              <Link href="https://www.instagram.com/timbex_sy" className="hover:text-primary focus:text-primary text-white transition-colors flex flex-col items-center text-xl font-bold" target="_blank" rel="noopener noreferrer">
                 <Instagram className="h-8 w-8 mb-2" />
                 <span>Instagram</span>
               </Link>

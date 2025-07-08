@@ -46,7 +46,7 @@ const translations = {
 const iSeriesTranslations = {
   heading: {
     en: 'INFINITY I-SERIES ADDED BENEFITS',
-    ar: 'مزايا إضافية لسلسلة إنفينيتي I',
+    ar: 'مزايا إضافية لسلسلة إنفينيتي اي اس  ',
   },
   benefits: [
     {
@@ -330,7 +330,7 @@ export default function InfinityPage({ category, subcategory, products }: Subcat
         </div>
 
             <div className="overflow-x-auto">
-              <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-4  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
+              <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-4  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center">
                 {subcategory.colors.map((color, idx) => (
                   color.image && (
                     <img

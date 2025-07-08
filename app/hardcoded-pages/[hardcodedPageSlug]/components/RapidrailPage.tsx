@@ -221,6 +221,7 @@ export default async function RapidrailPage({ searchParams }: Props) {
               }
               dir={lang === 'ar' ? 'rtl' : undefined}
               lang={lang === 'ar' ? 'ar' : undefined}
+              style={{ fontWeight: 'normal' }}
             >
               {lang === 'ar'
                 ? 'يجمع RapidRail بين الأمان والفن ليقدم نظام درابزين مركب يجعل مساحتك أكثر عملية وأمانًا وجاذبية، وخاليًا تقريبًا من الصيانة. اجعل شرفتك مساحة معيشة حقيقية مع درابزين مبتكر يوفر إحساسًا قويًا بالأمان ويعزز أسلوب حياة أكثر سهولة.'
@@ -231,8 +232,8 @@ export default async function RapidrailPage({ searchParams }: Props) {
         <div className="bg-white/50 backdrop-blur-sm border border-primary rounded-lg shadow p-6 mt-6">
           <div className="flex flex-col md:flex-row justify-center items-center gap-8 mt-6">
             <div className="w-full md:w-1/2 flex flex-col items-center">
-              <p><strong>{lang === 'ar' ? 'ارتفاع العمود:' : 'Post height:'}</strong> 1180 mm</p>
-              <p><strong>{lang === 'ar' ? 'الطول:' : 'Length:'}</strong> 1806 mm</p>
+              <p><strong>{lang === 'ar' ? 'ارتفاع العمود: 1180 مم' : 'Post height: 1180 mm'}</strong></p>
+              <p><strong>{lang === 'ar' ? 'الطول: 1806 مم' : 'Length: 1806 mm'}</strong></p>
               <p>{lang === 'ar' ? 'ملاحظة: أغطية وقواعد الأعمدة متوفرة' : 'Note: Matching post caps and skirting available'}</p>
             </div>
             <div className="w-full md:w-1/2 flex justify-center">

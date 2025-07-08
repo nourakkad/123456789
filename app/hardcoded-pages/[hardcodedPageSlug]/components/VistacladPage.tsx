@@ -54,8 +54,8 @@ const translations = {
   coverageWidth: { en: 'Coverage width', ar: 'عرض التغطية' },
   mass: { en: 'Mass', ar: 'الكتلة' },
   standardInfinity: { en: 'Standard (Infinity)', ar: 'قياسي (إنفينيتي)' },
-  dimensionsValue: { en: '159.5 x 22.5 mm\n(5.45 m lengths)', ar: '159.5 × 22.5 مم\n(أطوال 5.45 م)' },
-  coverageValue: { en: '6.6 m²/m²', ar: '6.6 م²/م²' },
+  dimensionsValue: { en: '159.5 x 22.5 mm\n(5.45 m lengths)', ar: '159.5 × 22.5 مم (أطوال 5.45 متر)' },
+  coverageValue: { en: '6.6 m²/m²', ar: ' م²/م² 6.6' },
   massValue: { en: '2.2 kg/m', ar: '2.2 كجم/م' },
   colourRange: { en: 'COLOUR RANGE – BRUSHED SOFTWOOD FINISH', ar: 'مجموعة الألوان - تشطيب الخشب الناعم المصقول' },
   technology: { en: 'TECHNOLOGY:', ar: 'التقنية:' },
@@ -64,7 +64,7 @@ const translations = {
     en: 'The Infinity colour range offers specialised streaked colour technology to ensure that no two cladding boards are identical and to give your exterior walls the look of natural timber cladding. The brushed finish applied to the VistaClad Infinity cladding boards further enhances the natural tones, allowing you to enjoy the look of timber cladding in a more durable, hassle-free, and sustainable bamboo composite.',
     ar: 'تقدم مجموعة ألوان إنفينيتي تقنية ألوان مخططة متخصصة لضمان عدم تطابق أي لوحين من ألواح الكسوة، ولمنح جدرانك الخارجية مظهرًا يشبه الكسوة الخشبية الطبيعية. يُعزز الطلاء المصقول المُستخدم في ألواح كسوة فيستاكلاد إنفينيتي درجات الألوان الطبيعية، مما يتيح لك الاستمتاع بمظهر الكسوة الخشبية في مركب خيزران أكثر متانة وسهولة واستدامة.'
   },
-  cuttingEdgeTitle: { en: 'CUTTING-EDGE, SUSTAINABLE CLADDING', ar: 'كسوة متطورة ومستدامة' },
+  cuttingEdgeTitle: { en: 'CUTTING-EDGE, SUSTAINABLE CLADDING', ar: 'اكساء واجهات متطور ومستدام' },
   cuttingEdgeDesc: {
     en: 'VistaClad bamboo composite cladding breathes vibrancy into your home or office space and enhances your walls with the attractive look of natural hardwoods. Let routine maintenance and premature replacement be things of the past as you look to the future with one of the most cutting-edge cladding systems available, complete with complementary trim for a neat and tidy finish.',
     ar: 'تضفي كسوة فيستاكلاد المصنوعة من الخيزران المركب حيويةً على منزلك أو مكتبك، وتُضفي على جدرانك مظهرًا جذابًا للأخشاب الصلبة الطبيعية. دع الصيانة الدورية والاستبدال المبكر شيئًا من الماضي، وتطلع إلى المستقبل مع أحد أحدث أنظمة الكسوة المتاحة، مع لمسات نهائية أنيقة ومرتبة.'
@@ -214,6 +214,7 @@ export default async function VistacladPage({ searchParams }: Props) {
               }
               dir={lang === 'ar' ? 'rtl' : undefined}
               lang={lang === 'ar' ? 'ar' : undefined}
+              style={{ fontWeight: 'normal' }}
             >
               {translations.infinityProfileDesc[lang]}
             </p>

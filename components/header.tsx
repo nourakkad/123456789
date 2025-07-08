@@ -72,7 +72,10 @@ export default function Header({ siteName, siteDescription, categories, logo }: 
             </Button>
           </PopoverTrigger>
           <PopoverContent align="start" sideOffset={8} className="p-0 w-64 mt-2 bg-transparent border-none shadow-none">
-            <MobileNav categories={categories} closeMenu={() => setMobileMenuOpen(false)} />
+            <MobileNav categories={categories.map(cat => ({
+              ...cat,
+              id: cat.id || "",
+            }))} closeMenu={() => setMobileMenuOpen(false)} />
           </PopoverContent>
         </Popover>
 
@@ -133,9 +136,36 @@ export default function Header({ siteName, siteDescription, categories, logo }: 
         </nav>
 
         <div className="ml-auto flex items-center space-x-4">
-          
-          <div className="ml-2 ">
-            <LanguageSwitcher />
+        
+          <div className="flex items-center space-x-1">
+            <button
+              className={cn(
+                "px-2 py-1 rounded text-sm font-bold transition-colors",
+                lang === "en" ? "bg-primary text-white" : "bg-white text-primary hover:bg-primary/10"
+              )}
+              disabled={lang === "en"}
+              onClick={() => {
+                const params = new URLSearchParams(Array.from(searchParams.entries()));
+                params.delete("lang");
+                window.location.href = `${pathname}${params.toString() ? `?${params.toString()}` : ""}`;
+              }}
+            >
+              EN
+            </button>
+            <button
+              className={cn(
+                "px-2 py-1 rounded text-sm font-bold transition-colors",
+                lang === "ar" ? "bg-primary text-white" : "bg-white text-primary hover:bg-primary/10"
+              )}
+              disabled={lang === "ar"}
+              onClick={() => {
+                const params = new URLSearchParams(Array.from(searchParams.entries()));
+                params.set("lang", "ar");
+                window.location.href = `${pathname}?${params.toString()}`;
+              }}
+            >
+              AR
+            </button>
           </div>
         </div>
       </div>

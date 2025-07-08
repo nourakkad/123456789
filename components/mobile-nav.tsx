@@ -29,6 +29,7 @@ export default function MobileNav({ categories = [], closeMenu }: MobileNavProps
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang") === "ar" ? "ar" : "en";
   const [openCategory, setOpenCategory] = useState<string | null>(null)
+  const [showCategories, setShowCategories] = useState(false);
   const router = useRouter();
 
   const isActive = (path: string) => {
@@ -52,95 +53,77 @@ export default function MobileNav({ categories = [], closeMenu }: MobileNavProps
   return (
     <div className="bg-green-100/40 backdrop-blur-lg border border-green-200/50 rounded-2xl p-3 min-h-[320px] flex items-center justify-center">
       <div className="w-full max-w-xs">
-        <Link
-          href={{ pathname: "/", query: lang === "ar" ? { lang } : undefined }}
-          className={cn(
-            "block py-3 px-4 rounded-lg text-lg font-bold transition-all duration-200",
-            isActive("/") ? "bg-primary/10 text-primary shadow" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
-          )}
-          onClick={closeMenu}
-        >
-          {lang === "ar" ? "الرئيسية" : "Home"}
-        </Link>
-
-        <Collapsible open={openCategory === "products"}>
-          <CollapsibleTrigger asChild>
+        {!showCategories ? (
+          <>
+            <Link
+              href={{ pathname: "/", query: lang === "ar" ? { lang } : undefined }}
+              className={cn(
+                "block py-3 px-4 rounded-lg text-lg font-bold transition-all duration-200",
+                isActive("/") ? "bg-primary/10 text-primary shadow" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
+              )}
+              onClick={closeMenu}
+            >
+              {lang === "ar" ? "الرئيسية" : "Home"}
+            </Link>
             <Button
               variant="ghost"
               className={cn(
                 "flex w-full justify-between items-center py-3 px-4 rounded-lg text-lg font-bold transition-all duration-200",
                 pathname.startsWith("/products") ? "bg-primary/10 text-primary shadow" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
               )}
-              onClick={() => toggleCategory("products")}
+              onClick={() => setShowCategories(true)}
             >
               {lang === "ar" ? "المنتجات" : "Products"}
-              <ChevronDown
-                className={cn("h-5 w-5 ml-2 transition-transform", openCategory === "products" ? "rotate-180" : "")}
-              />
+              <ChevronDown className="h-5 w-5 ml-2" />
             </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
+            <Link
+              href={{ pathname: "/gallery", query: lang === "ar" ? { lang } : undefined }}
+              className={cn(
+                "block py-3 px-4 rounded-lg text-lg font-bold transition-all duration-200",
+                pathname.startsWith("/gallery") ? "bg-primary/10 text-primary shadow" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
+              )}
+              onClick={closeMenu}
+            >
+              {lang === "ar" ? "المعرض" : "Gallery"}
+            </Link>
+            <Link
+              href={{ pathname: "/contact", query: lang === "ar" ? { lang } : undefined }}
+              className={cn(
+                "block py-3 px-4 rounded-lg text-lg font-bold transition-all duration-200",
+                isActive("/contact") ? "bg-primary/10 text-primary shadow" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
+              )}
+              onClick={closeMenu}
+            >
+              {lang === "ar" ? "تواصل معنا" : "Contact Us"}
+            </Link>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2 mb-2 px-2 py-1 text-base"
+              onClick={() => setShowCategories(false)}
+            >
+              <ChevronDown className="h-5 w-5 rotate-90" />
+              {lang === "ar" ? "القائمة الرئيسية" : "Main Menu"}
+            </Button>
             <div className="flex flex-col gap-2 mt-2">
               {categories.map((category) => (
-                <div key={category.id} className="">
-                  <Link
-                    href={`/products/${category.slug}?lang=${lang}`}
-                    className={cn(
-                      "block py-2 px-4 rounded-md text-base font-semibold transition-all duration-200",
-                      pathname === `/products/${category.slug}` ? "bg-primary/10 text-primary" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
-                    )}
-                    onClick={closeMenu}
-                  >
-                    {typeof category.name === 'string' ? category.name : (category.name?.[lang] || category.name?.en || "")}
-                  </Link>
-                  {category.subcategories && category.subcategories.length > 0 && (
-                    <div className="ml-4 border-l-2 border-primary/10 pl-3 mt-1 flex flex-col gap-1">
-                      {(category.subcategories as SubcategoryNav[] | undefined)?.map((sub) => (
-                        <Link
-                          key={sub.id}
-                          href={
-                            sub.hardcodedPageSlug
-                              ? `/hardcoded-pages/${sub.hardcodedPageSlug}?categorySlug=${category.slug}&lang=${lang}`
-                              : `/products/${category.slug}/${sub.slug}?lang=${lang}`
-                          }
-                          className={cn(
-                            "block py-1 px-5 rounded text-sm font-normal transition-all duration-200 border-l-2 border-primary/10 ml-2",
-                            pathname === `/products/${category.slug}/${sub.slug}` ? "bg-primary/10 text-primary" : "text-gray-600 hover:bg-primary/10 hover:text-primary"
-                          )}
-                          onClick={closeMenu}
-                        >
-                          {typeof sub.name === 'string' ? sub.name : (sub.name?.[lang] || sub.name?.en || "")}
-                        </Link>
-                      ))}
-                    </div>
+                <Link
+                  key={category.id}
+                  href={`/products/${category.slug}?lang=${lang}`}
+                  className={cn(
+                    "block py-2 px-4 rounded-md text-base font-semibold transition-all duration-200",
+                    pathname === `/products/${category.slug}` ? "bg-primary/10 text-primary" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
                   )}
-                </div>
+                  onClick={closeMenu}
+                >
+                  {typeof category.name === 'string' ? category.name : (category.name?.[lang] || category.name?.en || "")}
+                </Link>
               ))}
             </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        <Link
-          href={{ pathname: "/gallery", query: lang === "ar" ? { lang } : undefined }}
-          className={cn(
-            "block py-3 px-4 rounded-lg text-lg font-bold transition-all duration-200",
-            pathname.startsWith("/gallery") ? "bg-primary/10 text-primary shadow" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
-          )}
-          onClick={closeMenu}
-        >
-          {lang === "ar" ? "المعرض" : "Gallery"}
-        </Link>
-
-        <Link
-          href={{ pathname: "/contact", query: lang === "ar" ? { lang } : undefined }}
-          className={cn(
-            "block py-3 px-4 rounded-lg text-lg font-bold transition-all duration-200",
-            isActive("/contact") ? "bg-primary/10 text-primary shadow" : "text-gray-800 hover:bg-primary/10 hover:text-primary"
-          )}
-          onClick={closeMenu}
-        >
-          {lang === "ar" ? "تواصل معنا" : "Contact Us"}
-        </Link>
+          </>
+        )}
       </div>
     </div>
   )
