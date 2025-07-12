@@ -17,8 +17,6 @@ import { useRouter } from "next/navigation"
 
 interface GalleryImage {
   id?: string
-  title: string | { en: string; ar: string }
-  description: string | { en: string; ar: string }
   url?: string
   createdAt: string
   category?: string
@@ -70,10 +68,6 @@ export default function GalleryTableClient({ images }: { images: GalleryImage[] 
         <thead>
           <tr className="bg-gray-100">
             <th className="p-2 md:p-4 text-left">Image</th>
-            <th className="p-2 md:p-4 text-left">Title (EN)</th>
-            <th className="p-2 md:p-4 text-left">Title (AR)</th>
-            <th className="p-2 md:p-4 text-left">Description (EN)</th>
-            <th className="p-2 md:p-4 text-left">Description (AR)</th>
             <th className="p-2 md:p-4 text-left">Category</th>
             <th className="p-2 md:p-4 text-left">Actions</th>
           </tr>
@@ -86,7 +80,7 @@ export default function GalleryTableClient({ images }: { images: GalleryImage[] 
                   <div className="relative w-20 h-20">
                     <Image
                       src={`/api/images/${image.thumbUrl || image.url}`}
-                      alt={getLangField(image.title, "en")}
+                      alt="Gallery image"
                       fill
                       className="object-cover rounded"
                       loading="lazy"
@@ -94,10 +88,6 @@ export default function GalleryTableClient({ images }: { images: GalleryImage[] 
                   </div>
                 )}
               </td>
-              <td className="p-2 md:p-4">{brief(getLangField(image.title, "en"))}</td>
-              <td className="p-2 md:p-4">{brief(getLangField(image.title, "ar"))}</td>
-              <td className="p-2 md:p-4 max-w-[200px] truncate">{brief(getLangField(image.description, "en"))}</td>
-              <td className="p-2 md:p-4 max-w-[200px] truncate">{brief(getLangField(image.description, "ar"))}</td>
               <td className="p-2 md:p-4">{image.category || '-'}</td>
               <td className="p-2 md:p-4">
                 <div className="flex gap-2">

@@ -14,7 +14,7 @@ export default async function AdminGalleryPage() {
         <Link href="/admin/gallery/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            Add Image
+            Add Images
           </Button>
         </Link>
       </div>

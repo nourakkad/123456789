@@ -33,9 +33,8 @@ export interface Category {
 export interface GalleryImage {
   _id?: string | ObjectId
   id?: string
-  title: string
-  description: string
   url?: string
+  thumbUrl?: string
   createdAt: string
   category?: string
 }

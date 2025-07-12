@@ -75,8 +75,6 @@ const CategorySchema = z.object({
 });
 
 const GalleryImageSchema = z.object({
-  title: z.object({ en: z.string().min(2), ar: z.string().min(2) }),
-  description: z.object({ en: z.string().min(5), ar: z.string().min(5) }),
   url: z.string().min(2),
   thumbUrl: z.string().optional(),
 });
@@ -548,23 +546,15 @@ export async function deleteSubcategory(formData: FormData) {
 export async function createGalleryImage(formData: FormData) {
   try {
     const { db } = await connectToDatabase()
-    const title_en = formData.get("title_en")?.toString() || "";
-    const title_ar = formData.get("title_ar")?.toString() || "";
-    const description_en = formData.get("description_en")?.toString() || "";
-    const description_ar = formData.get("description_ar")?.toString() || "";
     const category = formData.get("category")?.toString() || "";
-    const title = { en: title_en, ar: title_ar };
-    const description = { en: description_en, ar: description_ar };
-    const url = (formData.get("url") as string) || "/placeholder.svg?height=600&width=600&text=" + encodeURIComponent(title.en)
+    const url = (formData.get("url") as string) || "/placeholder.svg?height=600&width=600&text=Gallery+Image"
     const thumbUrl = (formData.get("thumbUrl") as string) || null;
     // Validate gallery image
-    const parsed = GalleryImageSchema.safeParse({ title, description, url });
+    const parsed = GalleryImageSchema.safeParse({ url });
     if (!parsed.success) {
       throw new Error(parsed.error.errors.map(e => e.message).join(", "));
     }
     const image = {
-      title,
-      description,
       url,
       thumbUrl,
       createdAt: new Date().toISOString(),
@@ -584,22 +574,12 @@ export async function updateGalleryImage(formData: FormData) {
   try {
     const { db } = await connectToDatabase()
     const id = formData.get("id") as string
-    const title = {
-      en: formData.get("title_en")?.toString() || "",
-      ar: formData.get("title_ar")?.toString() || "",
-    };
-    const description = {
-      en: formData.get("description_en")?.toString() || "",
-      ar: formData.get("description_ar")?.toString() || "",
-    };
     // Validate update
-    const parsed = GalleryImageSchema.partial().safeParse({ title, description });
+    const parsed = GalleryImageSchema.partial().safeParse({});
     if (!parsed.success) {
       throw new Error(parsed.error.errors.map(e => e.message).join(", "));
     }
     const updateData = {
-      title,
-      description,
       updatedAt: new Date().toISOString(),
     }
     await db.collection(collections.gallery).updateOne({ _id: new ObjectId(id) }, { $set: updateData })

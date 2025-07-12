@@ -19,10 +19,10 @@ import {
 
 interface GalleryImage {
   id: string
-  title: string
-  description: string
   url?: string
   createdAt: string
+  category?: string
+  thumbUrl?: string
 }
 
 interface GalleryDataTableProps {
@@ -42,7 +42,7 @@ export default function GalleryDataTable({ images }: GalleryDataTableProps) {
           <div className="w-12 h-12 relative">
             <Image
               src={image.url || "/placeholder.svg?height=48&width=48"}
-              alt={image.title || "Gallery image"}
+              alt="Gallery image"
               fill
               className="object-cover rounded"
             />
@@ -51,19 +51,8 @@ export default function GalleryDataTable({ images }: GalleryDataTableProps) {
       },
     },
     {
-      accessorKey: "title",
-      header: "Title",
-    },
-    {
-      accessorKey: "description",
-      header: "Description",
-      cell: ({ row }: { row: any }) => {
-        const image = row.original
-        if (!image || !image.description) return null
-
-        const description = image.description
-        return description.length > 50 ? description.substring(0, 50) + "..." : description
-      },
+      accessorKey: "category",
+      header: "Category",
     },
     {
       id: "actions",
@@ -82,7 +71,7 @@ export default function GalleryDataTable({ images }: GalleryDataTableProps) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete Image</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete <b>{image.title}</b>? This action cannot be undone.
+                    Are you sure you want to delete this image? This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
