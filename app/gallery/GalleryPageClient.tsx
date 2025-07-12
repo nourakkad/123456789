@@ -16,6 +16,7 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang") === "ar" ? "ar" : "en";
   const initialCategory = searchParams.get("category");
+  const [isMobile, setIsMobile] = useState(false);
 
   // Group images by category
   const categoryMap: Record<string, GalleryImage[]> = {};
@@ -26,6 +27,7 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
   });
   const categories = Object.keys(categoryMap);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory || null);
+  
   // For pagination, responsive to screen size
   const getInitialVisibleCount = () => {
     if (typeof window !== 'undefined' && window.innerWidth < 640) {
@@ -33,21 +35,51 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
     }
     return 12;
   };
+  
   const [visibleCount, setVisibleCount] = useState(getInitialVisibleCount());
+  const [isLoading, setIsLoading] = useState(false);
 
   // Update visibleCount on resize (for SPA navigation)
   useEffect(() => {
     const handleResize = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
       setVisibleCount(getInitialVisibleCount());
     };
+    
+    // Set initial mobile state
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < 640);
+    }
+    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Handle load more with better mobile support
+  const handleLoadMore = () => {
+    setIsLoading(true);
+    
+    // Use setTimeout to simulate loading and ensure state updates properly
+    setTimeout(() => {
+      const increment = isMobile ? 6 : 12;
+      const newCount = visibleCount + increment;
+      setVisibleCount(newCount);
+      setIsLoading(false);
+    }, 100);
+  };
+
+  // Prevent double-tap zoom on mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+  };
 
   // If a category is selected, show only that category's images (paginated)
   if (selectedCategory) {
     const filteredImages = categoryMap[selectedCategory] || [];
     const visibleImages = filteredImages.slice(0, visibleCount);
+    const hasMoreImages = visibleCount < filteredImages.length;
+    
     return (
       <div className="container mx-auto px-4 py-8">
         {/* Header with back button and category info */}
@@ -114,17 +146,72 @@ export default function GalleryPageClient({ images }: { images: GalleryImage[] }
               ))}
             </div>
             
-            {visibleCount < filteredImages.length && (
+            {hasMoreImages && (
               <div className="flex justify-center mt-12">
+                {/* Primary button - hidden on mobile, shown on desktop */}
                 <button
-                  onClick={() => setVisibleCount(c => c + 12)}
-                  className="px-8 py-3 rounded-full bg-primary text-white font-semibold shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+                  onClick={handleLoadMore}
+                  onTouchStart={handleTouchStart}
+                  disabled={isLoading}
+                  className="hidden sm:flex px-8 py-4 rounded-full bg-primary text-white font-semibold shadow-lg hover:bg-primary/90 hover:shadow-xl active:scale-95 transition-all duration-300 items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation select-none"
+                  style={{ 
+                    minHeight: '48px', 
+                    minWidth: '200px',
+                    WebkitTapHighlightColor: 'transparent',
+                    WebkitTouchCallout: 'none',
+                    WebkitUserSelect: 'none',
+                    userSelect: 'none'
+                  }}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                  {lang === 'ar' ? 'عرض المزيد' : 'Load More Images'}
+                  {isLoading ? (
+                    <>
+                      <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {lang === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      </svg>
+                      {lang === 'ar' ? 'عرض المزيد' : 'Load More Images'}
+                    </>
+                  )}
                 </button>
+                
+                {/* Fallback div for mobile devices */}
+                <div 
+                  onClick={handleLoadMore}
+                  onTouchStart={handleTouchStart}
+                  className="flex sm:hidden px-8 py-4 rounded-full bg-primary text-white font-semibold shadow-lg active:scale-95 transition-all duration-300 items-center gap-2 touch-manipulation select-none cursor-pointer"
+                  style={{ 
+                    minHeight: '48px', 
+                    minWidth: '200px',
+                    WebkitTapHighlightColor: 'transparent',
+                    WebkitTouchCallout: 'none',
+                    WebkitUserSelect: 'none',
+                    userSelect: 'none'
+                  }}
+                >
+                  {isLoading ? (
+                    <>
+                      <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {lang === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      </svg>
+                      {lang === 'ar' ? 'عرض المزيد' : 'Load More Images'}
+                    </>
+                  )}
+                </div>
               </div>
             )}
           </>
