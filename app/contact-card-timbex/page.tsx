@@ -17,12 +17,12 @@ export default function ContactCardShady() {
 
           {/* Quick Actions */}
           <div className="flex gap-3 justify-center mb-2">
-            <a href="tel:+963968484801" className="group bg-green-600 hover:bg-green-700 text-white p-2 rounded-full shadow-lg transition">
+            <a href="tel:+963968484801" className="bg-green-600 text-white p-2 rounded-full shadow-lg">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h2.28a2 2 0 011.94 1.515l.516 2.064a2 2 0 01-.45 1.958l-1.27 1.27a16.001 16.001 0 006.586 6.586l1.27-1.27a2 2 0 011.958-.45l2.064.516A2 2 0 0121 18.72V21a2 2 0 01-2 2h-1C9.163 23 1 14.837 1 5V4a2 2 0 012-2z" />
               </svg>
             </a>
-            <a href="mailto:info@timbex-sy.com" className="group bg-green-600 hover:bg-green-700 text-white p-2 rounded-full shadow-lg transition">
+            <a href="mailto:info@timbex-sy.com" className="bg-green-600 text-white p-2 rounded-full shadow-lg">
              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 4H8a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M22 6l-10 7L2 6" />
@@ -93,7 +93,7 @@ export default function ContactCardShady() {
           <a
   href="/timbex.vcf"
   download
-  className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-full shadow transition"
+  className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-full shadow"
 >
   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-6 4h8" />
